@@ -1,0 +1,89 @@
+"use strict";
+
+var helpers = require("../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = void 0;
+
+  var _react = _interopRequireDefault(require("react"));
+
+  var _styledComponents = _interopRequireDefault(require("styled-components"));
+
+  var _pieces = _interopRequireDefault(require("../../../common/pieces"));
+
+  var _SocketProvider = require("../providers/SocketProvider");
+
+  var _jsxFileName = "/Users/kkalamarski/Projects/chess/public/src/components/Sidebar.tsx",
+      _s = $RefreshSig$();
+
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+  const SidebarWrapper = _c = _styledComponents.default.aside`
+  display: flex;
+  border: 1px black solid;
+  flex-direction: column;
+  justify-content: space-between;
+`;
+
+  const Sidebar = () => {
+    _s();
+
+    const game = (0, _SocketProvider.useGame)();
+    console.log(game);
+    const playerPieces = game?.settings?.pieces;
+    const computerPieces = playerPieces === _pieces.default.WHITE ? _pieces.default.BLACK : _pieces.default.WHITE;
+    return /*#__PURE__*/_react.default.createElement(SidebarWrapper, {
+      __self: void 0,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 23,
+        columnNumber: 5
+      }
+    }, /*#__PURE__*/_react.default.createElement("div", {
+      __self: void 0,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 24,
+        columnNumber: 7
+      }
+    }, "Computer (", computerPieces, " pieces)"), /*#__PURE__*/_react.default.createElement("div", {
+      __self: void 0,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 25,
+        columnNumber: 7
+      }
+    }, "Moves"), /*#__PURE__*/_react.default.createElement("div", {
+      __self: void 0,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 26,
+        columnNumber: 7
+      }
+    }, "Player (", playerPieces, " pieces)"));
+  };
+
+  _s(Sidebar, "QwigEaWsAAkx4/Sjvd0zS0oWOoQ=", false, function () {
+    return [_SocketProvider.useGame];
+  });
+
+  _c2 = Sidebar;
+  var _default = Sidebar;
+  exports.default = _default;
+
+  var _c, _c2;
+
+  $RefreshReg$(_c, "SidebarWrapper");
+  $RefreshReg$(_c2, "Sidebar");
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}

@@ -1,0 +1,93 @@
+"use strict";
+
+var helpers = require("../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = void 0;
+
+  var _react = _interopRequireDefault(require("react"));
+
+  var _styledComponents = _interopRequireDefault(require("styled-components"));
+
+  var _classic = _interopRequireDefault(require("url:../../assets/sprites/classic.png"));
+
+  var _jsxFileName = "/Users/kkalamarski/Projects/chess/public/src/components/Piece.tsx";
+
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+  const PieceWrapper = _c = _styledComponents.default.div`
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 48px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: ${p => p.color};
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: black;
+`;
+
+  function hasLowerCase(str) {
+    return /[a-z]/.test(str);
+  }
+
+  const PieceIcon = _c2 = _styledComponents.default.img.attrs({
+    src: _classic.default
+  })`
+  object-fit: none;
+  object-position: 7px -850px;
+  width: 80px;
+  height: 80px;
+`;
+
+  const Piece = ({
+    piece
+  }) => {
+    const color = hasLowerCase(piece) ? "black" : "white";
+    return /*#__PURE__*/_react.default.createElement(PieceWrapper, {
+      color: color,
+      __self: void 0,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 39,
+        columnNumber: 5
+      }
+    }, piece && /*#__PURE__*/_react.default.createElement(PieceIcon, {
+      piece: piece,
+      __self: void 0,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 40,
+        columnNumber: 17
+      }
+    }));
+  };
+
+  _c3 = Piece;
+  var _default = Piece;
+  exports.default = _default;
+
+  var _c, _c2, _c3;
+
+  $RefreshReg$(_c, "PieceWrapper");
+  $RefreshReg$(_c2, "PieceIcon");
+  $RefreshReg$(_c3, "Piece");
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}

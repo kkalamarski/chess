@@ -1,0 +1,101 @@
+"use strict";
+
+var helpers = require("../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = exports.useSocket = exports.GameContext = exports.SocketContext = void 0;
+
+  var _react = _interopRequireWildcard(require("react"));
+
+  var _socket = require("socket.io-client");
+
+  var _actions = _interopRequireDefault(require("../../../common/actions"));
+
+  var _gameReducer = _interopRequireDefault(require("../reducers/gameReducer"));
+
+  var _jsxFileName = "/Users/kkalamarski/Projects/chess/public/src/providers/SocketProvider.tsx",
+      _s = $RefreshSig$(),
+      _s2 = $RefreshSig$();
+
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+  function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+  function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+  const SocketContext = /*#__PURE__*/_react.default.createContext({});
+
+  exports.SocketContext = SocketContext;
+
+  const GameContext = /*#__PURE__*/_react.default.createContext({});
+
+  exports.GameContext = GameContext;
+
+  const useSocket = () => {
+    _s();
+
+    return (0, _react.useContext)(SocketContext);
+  };
+
+  exports.useSocket = useSocket;
+
+  _s(useSocket, "gDsCjeeItUuvgOWf1v4qoK9RF6k=");
+
+  const SocketProvider = ({
+    children
+  }) => {
+    _s2();
+
+    const [socket, setSocket] = (0, _react.useState)();
+    const [state, dispatch] = (0, _react.useReducer)(_gameReducer.default, {});
+    (0, _react.useEffect)(() => {
+      const socket = (0, _socket.io)();
+      socket.on(_actions.default.START_GAME, data => {
+        dispatch({
+          type: _actions.default.START_GAME,
+          data
+        });
+      });
+      setSocket(socket);
+    }, []);
+    if (!socket) return null;
+    return /*#__PURE__*/_react.default.createElement(SocketContext.Provider, {
+      value: socket,
+      __self: void 0,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 28,
+        columnNumber: 5
+      }
+    }, /*#__PURE__*/_react.default.createElement(GameContext.Provider, {
+      value: state,
+      __self: void 0,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 29,
+        columnNumber: 7
+      }
+    }, children));
+  };
+
+  _s2(SocketProvider, "ogZDln2VTl6gq+XiGKxWxqsABYE=");
+
+  _c = SocketProvider;
+  var _default = SocketProvider;
+  exports.default = _default;
+
+  var _c;
+
+  $RefreshReg$(_c, "SocketProvider");
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}

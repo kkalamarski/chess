@@ -1,0 +1,35 @@
+{
+  "name": "chess",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.html",
+  "scripts": {
+    "dev": "concurrently \"parcel watch public/index.html --public-url /public --dist-dir dist\" \"nodemon --exec ts-node index.ts\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "js-chess-engine": "^0.6.1",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-socket-io-hooks": "^1.1.0",
+    "socket.io": "^3.1.1",
+    "socket.io-client": "^3.1.1",
+    "styled-components": "^5.2.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.11",
+    "@types/node": "^14.14.27",
+    "@types/react": "^17.0.2",
+    "@types/react-dom": "^17.0.1",
+    "@types/socket.io": "^2.1.13",
+    "@types/styled-components": "^5.1.7",
+    "concurrently": "^5.3.0",
+    "nodemon": "^2.0.7",
+    "parcel": "^2.0.0-beta.1",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.1.5"
+  }
+}

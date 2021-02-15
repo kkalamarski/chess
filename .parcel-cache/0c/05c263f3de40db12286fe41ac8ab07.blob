@@ -1,0 +1,15 @@
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var Actions;
+
+(function (Actions) {
+  Actions["UPDATE_BOARD"] = "UPDATE_BOARD";
+  Actions["MOVE"] = "MOVE";
+})(Actions || (Actions = {}));
+
+var _default = Actions;
+exports.default = _default;

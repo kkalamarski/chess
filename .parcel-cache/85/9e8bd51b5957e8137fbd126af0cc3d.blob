@@ -1,0 +1,104 @@
+"use strict";
+
+var helpers = require("../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = void 0;
+
+  var _react = _interopRequireDefault(require("react"));
+
+  var _styledComponents = _interopRequireWildcard(require("styled-components"));
+
+  var _Piece = _interopRequireDefault(require("./Piece"));
+
+  var _jsxFileName = "/Users/kkalamarski/Projects/chess/public/src/components/Tile.tsx";
+
+  function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+  function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+  const TileName = _c = _styledComponents.default.div`
+  color: #000000;
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: 100%;
+
+  font-size: 0.7em;
+
+  ${p => p.show && (0, _styledComponents.css)`
+      display: block !important;
+    `}
+`;
+  const TileWrapper = _c2 = _styledComponents.default.div`
+  background: ${p => p.color};
+  cursor: pointer;
+  position: relative;
+
+  ${TileName} {
+    display: none;
+  }
+
+  &:hover {
+    ${TileName} {
+      display: block;
+    }
+  }
+`;
+
+  const Tile = ({
+    color,
+    tile,
+    piece
+  }) => {
+    const [file, row] = tile.split("");
+    return /*#__PURE__*/_react.default.createElement(TileWrapper, {
+      color: color,
+      __self: void 0,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 48,
+        columnNumber: 5
+      }
+    }, /*#__PURE__*/_react.default.createElement(_Piece.default, {
+      piece: piece,
+      __self: void 0,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 49,
+        columnNumber: 7
+      }
+    }), /*#__PURE__*/_react.default.createElement(TileName, {
+      show: file === "a" || row === "1",
+      __self: void 0,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 50,
+        columnNumber: 7
+      }
+    }, tile));
+  };
+
+  _c3 = Tile;
+  var _default = Tile;
+  exports.default = _default;
+
+  var _c, _c2, _c3;
+
+  $RefreshReg$(_c, "TileName");
+  $RefreshReg$(_c2, "TileWrapper");
+  $RefreshReg$(_c3, "Tile");
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}

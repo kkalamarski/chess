@@ -1,0 +1,75 @@
+"use strict";
+
+var helpers = require("../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = void 0;
+
+  var _react = _interopRequireDefault(require("react"));
+
+  var _styledComponents = _interopRequireDefault(require("styled-components"));
+
+  var _Tile = _interopRequireDefault(require("./Tile"));
+
+  var _texture = _interopRequireDefault(require("url:../../assets/texture.jpg"));
+
+  var _jsxFileName = "/Users/kkalamarski/Projects/chess/public/src/components/ChessBoard.tsx";
+
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+  const ChessBoardWrapper = _c = _styledComponents.default.section`
+  margin: 0 auto;
+  width: 640px;
+  height: 640px;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  background: url(${_texture.default});
+  border: 2px solid black;
+`;
+
+  const ChessBoard = () => {
+    const tiles = Array(64).fill("").map((_, i) => {
+      const color = (i + Math.floor(i / 8)) % 2 === 0 ? "#faf4d3" : "#806443";
+      const file = "abcdefgh"[i % 8];
+      const row = -Math.floor(i / 8) + 8;
+      return /*#__PURE__*/_react.default.createElement(_Tile.default, {
+        color: color,
+        tile: file + row,
+        __self: void 0,
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 24,
+          columnNumber: 14
+        }
+      });
+    });
+    return /*#__PURE__*/_react.default.createElement(ChessBoardWrapper, {
+      __self: void 0,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 27,
+        columnNumber: 10
+      }
+    }, tiles);
+  };
+
+  _c2 = ChessBoard;
+  var _default = ChessBoard;
+  exports.default = _default;
+
+  var _c, _c2;
+
+  $RefreshReg$(_c, "ChessBoardWrapper");
+  $RefreshReg$(_c2, "ChessBoard");
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}

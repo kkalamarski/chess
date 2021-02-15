@@ -1,0 +1,71 @@
+"use strict";
+
+var helpers = require("../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = void 0;
+
+  var _react = _interopRequireDefault(require("react"));
+
+  var _styledComponents = _interopRequireDefault(require("styled-components"));
+
+  var _ChessBoard = _interopRequireDefault(require("./ChessBoard"));
+
+  var _Sidebar = _interopRequireDefault(require("./Sidebar"));
+
+  var _jsxFileName = "/Users/kkalamarski/Projects/chess/public/src/components/Game.tsx";
+
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+  const GameWrapper = _c = _styledComponents.default.section`
+  display: flex;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 1200px;
+`;
+
+  const Game = () => {
+    return /*#__PURE__*/_react.default.createElement(GameWrapper, {
+      __self: void 0,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 15,
+        columnNumber: 5
+      }
+    }, /*#__PURE__*/_react.default.createElement(_ChessBoard.default, {
+      __self: void 0,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 16,
+        columnNumber: 7
+      }
+    }), /*#__PURE__*/_react.default.createElement(_Sidebar.default, {
+      __self: void 0,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 17,
+        columnNumber: 7
+      }
+    }));
+  };
+
+  _c2 = Game;
+  var _default = Game;
+  exports.default = _default;
+
+  var _c, _c2;
+
+  $RefreshReg$(_c, "GameWrapper");
+  $RefreshReg$(_c2, "Game");
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
