@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import Pieces from "../../../common/pieces";
 import { useGame } from "../providers/SocketProvider";
+import Timer from "./Timer";
 
 const SidebarWrapper = styled.aside`
   display: flex;
@@ -12,10 +13,6 @@ const SidebarWrapper = styled.aside`
 
   font-size: 3rem;
   color: white;
-`;
-
-const Timer = styled.div<{ active: boolean; low: boolean }>`
-  color: ${(p) => (!p.active ? "#dddddd" : p.low ? "red" : "green")};
 `;
 
 const Sidebar = () => {
@@ -31,15 +28,19 @@ const Sidebar = () => {
   return (
     <SidebarWrapper>
       {!!computerTime && (
-        <Timer active={turn !== playerPieces} low={computerTime < 60}>
-          {Math.floor(computerTime / 60) + ":" + (computerTime % 60)}
-        </Timer>
+        <Timer
+          active={turn !== playerPieces}
+          low={computerTime < 60}
+          time={computerTime}
+        />
       )}
       <hr style={{ width: "100%" }} />
       {!!playerTime && (
-        <Timer active={turn === playerPieces} low={playerTime < 60}>
-          {Math.floor(playerTime / 60) + ":" + (playerTime % 60)}
-        </Timer>
+        <Timer
+          active={turn === playerPieces}
+          low={playerTime < 60}
+          time={playerTime}
+        />
       )}
     </SidebarWrapper>
   );

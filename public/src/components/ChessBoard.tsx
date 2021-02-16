@@ -8,6 +8,7 @@ import useEmitMove from "../hooks/useEmitMove";
 import useGameSettings from "../hooks/useGameSettings";
 import game from "../../../server/game";
 import Pieces from "../../../common/pieces";
+import { useGame } from "../providers/SocketProvider";
 
 const ChessBoardWrapper = styled.section`
   width: 640px;
@@ -18,10 +19,14 @@ const ChessBoardWrapper = styled.section`
 `;
 
 const ChessBoard = () => {
+  const game = useGame();
   const pieces = usePieces();
   const emitMove = useEmitMove();
   const gameSettings = useGameSettings();
   const [selected, setSelected] = useState<string | null>(null);
+  const possibleMoves: string[] = selected
+    ? game?.board?.moves?.[selected.toUpperCase()] ?? []
+    : [];
 
   const onTileClick = (tile: string, piece: string) => () => {
     if (!selected && !!piece) {
@@ -61,6 +66,7 @@ const ChessBoard = () => {
           selected={tile === selected}
           piece={piece}
           onTileClick={onTileClick(tile, piece)}
+          possibleMove={possibleMoves.includes(tile.toUpperCase())}
         />
       );
     });

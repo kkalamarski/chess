@@ -7,6 +7,7 @@ interface TileProps {
   piece: string;
   tile: string;
   selected: boolean;
+  possibleMove: boolean;
   onTileClick: React.MouseEventHandler<HTMLDivElement>;
 }
 
@@ -42,21 +43,33 @@ const TileWrapper = styled.div<{ color: string }>`
   }
 `;
 
+const PossibleMoveOverlay = styled.div`
+  background-color: #8db38b;
+  opacity: 0.8;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+`;
+
 const Tile: React.FC<TileProps> = ({
   color,
   tile,
   piece,
   selected,
+  possibleMove,
   onTileClick,
 }) => {
   const [file, row] = tile.split("");
 
   return (
     <TileWrapper
-      color={selected ? "red" : color}
+      color={selected ? "#04724D" : color}
       onClick={onTileClick}
       role="button"
     >
+      {possibleMove && <PossibleMoveOverlay />}
       <Piece piece={piece} />
       <TileName show={file === "a" || row === "1"}>{tile}</TileName>
     </TileWrapper>
