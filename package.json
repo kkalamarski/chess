@@ -17,6 +17,7 @@
     "react-socket-io-hooks": "^1.1.0",
     "socket.io": "^3.1.1",
     "socket.io-client": "^3.1.1",
+    "stockfish": "^11.0.0",
     "styled-components": "^5.2.1"
   },
   "devDependencies": {

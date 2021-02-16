@@ -24,6 +24,10 @@ const SocketProvider = ({ children }: any) => {
       dispatch({ type: Actions.UPDATE_SETTINGS, data });
     });
 
+    socket.on(Actions.TIME, (data: any) => {
+      dispatch({ type: Actions.TIME, data });
+    });
+
     setSocket(socket);
   }, []);
 

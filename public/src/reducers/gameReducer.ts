@@ -15,6 +15,9 @@ const gameReducer = (state: any, action: Action) => {
     case Actions.UPDATE_SETTINGS:
       return { ...state, settings: action.data };
 
+    case Actions.TIME:
+      return { ...state, ...action.data };
+
     default:
       return state;
   }

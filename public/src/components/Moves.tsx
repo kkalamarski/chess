@@ -15,12 +15,10 @@ const MovesWrapper = styled.aside`
 const Moves = () => {
   const game = useGame();
 
-  console.log(game?.board?.check, "Check!");
-  console.log(game?.board?.checkMate, "Checkmate!");
-
   return (
     <MovesWrapper>
       {game?.board?.check && !game?.board?.checkMate && "Check!"}
+      {game?.board?.moves.length === 0 && !game?.board?.check && "Stalemate!"}
       {game?.board?.checkMate && "Checkmate!"}
     </MovesWrapper>
   );

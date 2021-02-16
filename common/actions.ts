@@ -3,6 +3,7 @@ enum Actions {
   MOVE = "MOVE",
   UPDATE_SETTINGS = "UPDATE_SETTINGS",
   TURN = "TURN",
+  TIME = "TIME",
 }
 
 export default Actions;
