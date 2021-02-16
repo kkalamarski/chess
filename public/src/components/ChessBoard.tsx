@@ -15,7 +15,6 @@ const ChessBoardWrapper = styled.section`
   display: grid;
   grid-template-columns: repeat(8, 1fr);
   background: url(${texture});
-  border: 2px solid black;
 `;
 
 const ChessBoard = () => {
@@ -26,7 +25,10 @@ const ChessBoard = () => {
 
   const onTileClick = (tile: string, piece: string) => () => {
     if (!selected && !!piece) {
-      setSelected(tile);
+      const pieceColor =
+        piece.toLowerCase() === piece ? Pieces.BLACK : Pieces.WHITE;
+
+      if (pieceColor === gameSettings?.pieces) setSelected(tile);
       return;
     }
 
@@ -45,7 +47,7 @@ const ChessBoard = () => {
   let tiles = Array(64)
     .fill("")
     .map((_, i) => {
-      const color = (i + Math.floor(i / 8)) % 2 === 0 ? "#faf4d3" : "#806443";
+      const color = (i + Math.floor(i / 8)) % 2 === 0 ? "#FFFBFF" : "#92817A";
       const file = "abcdefgh"[i % 8];
       const row = -Math.floor(i / 8) + 8;
       const tile = file + row;

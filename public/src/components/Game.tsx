@@ -1,19 +1,23 @@
 import React from "react";
 import styled from "styled-components";
 import ChessBoard from "./ChessBoard";
+import Moves from "./Moves";
 import Sidebar from "./Sidebar";
 
 const GameWrapper = styled.section`
-  display: grid;
-  margin: 0 auto;
-  width: 100%;
-  max-width: 950px;
-  grid-template-columns: 8fr 4fr;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background: #1c1c1c;
+
+  width: 100vw;
+  height: 100vh;
 `;
 
 const Game = () => {
   return (
     <GameWrapper>
+      <Moves />
       <ChessBoard />
       <Sidebar />
     </GameWrapper>
