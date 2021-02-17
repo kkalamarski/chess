@@ -3,12 +3,12 @@ import calculatePiecePositionBonus from "./evaluation/calculatePiecePositionBonu
 const jsChess = require("js-chess-engine");
 
 const Values: { [x: string]: number } = {
-  p: 1,
-  n: 3,
-  b: 3,
-  r: 5,
-  q: 9,
-  k: 200,
+  p: 100,
+  n: 320,
+  b: 330,
+  r: 500,
+  q: 900,
+  k: 20000,
 };
 
 const evaluate = (FEN: string, depth: number): number => {
