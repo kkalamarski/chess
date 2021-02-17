@@ -9,8 +9,8 @@ const jsChess = require("js-chess-engine");
 const game = async (socket: Socket) => {
   const game = new jsChess.Game();
   const pieces = Math.random() > 0.5 ? Pieces.WHITE : Pieces.BLACK;
-  let whiteTime = 3 * 60;
-  let blackTime = 3 * 60;
+  let whiteTime = 5 * 60;
+  let blackTime = 5 * 60;
 
   const intervalId = setInterval(() => {
     const { turn, isFinished } = game.exportJson();
@@ -28,9 +28,11 @@ const game = async (socket: Socket) => {
 
   const getDepthLevel = (time: number): number => {
     if (time > 2 * 60) {
-      return 5;
-    } else if (time > 1.5 * 60) {
       return 3;
+    } else if (time > 1 * 60) {
+      return 2;
+    } else if (time > 10) {
+      return 1;
     }
 
     return 2;
@@ -51,6 +53,7 @@ const game = async (socket: Socket) => {
       engine.on("message", (bestMove) => resolve(bestMove));
     });
 
+    console.log(bestMove.from, bestMove.to, bestMove.evaluation);
     game.move(bestMove.from, bestMove.to);
 
     isWhite ? (blackTime += 3) : (whiteTime += 3);

@@ -39,12 +39,17 @@ const findBestMove = async (FEN: string, depth: number) => {
     )
   );
   console.timeEnd("Found AI move in:");
+  console.log("Engine depth:", depth);
 
-  const sorted = evaluatedMoves.sort((a, b) =>
-    board.turn === "white" ? b[2] - a[2] : a[2] - b[2]
-  );
+  const sorted = evaluatedMoves
+    .sort((a, b) => Math.random() - Math.random()) // shuffle moves with the same evaluation
+    .sort((a, b) => (board.turn === "white" ? b[2] - a[2] : a[2] - b[2]));
 
-  return { from: sorted?.[0]?.[0], to: sorted?.[0]?.[1] };
+  return {
+    from: sorted?.[0]?.[0],
+    to: sorted?.[0]?.[1],
+    evaluation: sorted?.[0]?.[2],
+  };
 };
 
 export default findBestMove;

@@ -9,8 +9,8 @@ const Values: { [x: string]: number } = {
   k: 9000,
 };
 
-const evaluate = (FEN: string): number => {
-  const { pieces } = jsChess.status(FEN);
+const evaluate = (FEN: string, depth: number): number => {
+  const { pieces, check, checkMate, turn } = jsChess.status(FEN);
 
   const blackPieces = Object.values<string>(pieces).filter((piece) =>
     /[a-z]/.test(piece)
@@ -18,6 +18,16 @@ const evaluate = (FEN: string): number => {
   const whitePieces = Object.values<string>(pieces).filter((piece) =>
     /[A-Z]/.test(piece)
   );
+
+  let bonus = 0;
+
+  if (check) {
+    bonus += 20 * depth + 1;
+  }
+
+  if (checkMate) {
+    bonus += 10000 * depth + 1;
+  }
 
   const blackPoints = blackPieces.reduce(
     (total, piece) => total + Values[piece.toLowerCase()],
@@ -29,7 +39,9 @@ const evaluate = (FEN: string): number => {
     0
   );
 
-  return whitePoints - blackPoints;
+  if (turn === "black") bonus *= -1;
+
+  return whitePoints - blackPoints + bonus;
 };
 
 export default evaluate;
