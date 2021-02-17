@@ -1,16 +1,18 @@
+import calculatePiecePositionBonus from "./evaluation/calculatePiecePositionBonus";
+
 const jsChess = require("js-chess-engine");
 
 const Values: { [x: string]: number } = {
-  p: 10,
-  n: 30,
-  b: 30,
-  r: 50,
-  q: 90,
-  k: 9000,
+  p: 1,
+  n: 3,
+  b: 3,
+  r: 5,
+  q: 9,
+  k: 200,
 };
 
 const evaluate = (FEN: string, depth: number): number => {
-  const { pieces, check, checkMate, turn } = jsChess.status(FEN);
+  const { pieces } = jsChess.status(FEN);
 
   const blackPieces = Object.values<string>(pieces).filter((piece) =>
     /[a-z]/.test(piece)
@@ -19,15 +21,7 @@ const evaluate = (FEN: string, depth: number): number => {
     /[A-Z]/.test(piece)
   );
 
-  let bonus = 0;
-
-  if (check) {
-    bonus += 20 * depth + 1;
-  }
-
-  if (checkMate) {
-    bonus += 10000 * depth + 1;
-  }
+  const positionBonus = calculatePiecePositionBonus(pieces);
 
   const blackPoints = blackPieces.reduce(
     (total, piece) => total + Values[piece.toLowerCase()],
@@ -39,9 +33,7 @@ const evaluate = (FEN: string, depth: number): number => {
     0
   );
 
-  if (turn === "black") bonus *= -1;
-
-  return whitePoints - blackPoints + bonus;
+  return whitePoints - blackPoints + positionBonus;
 };
 
 export default evaluate;

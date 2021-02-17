@@ -1,5 +1,5 @@
-import { Socket } from "socket.io";
 import Actions from "../common/actions";
+import { Socket } from "socket.io";
 import Pieces from "../common/pieces";
 import { fork } from "child_process";
 
@@ -26,32 +26,27 @@ const game = async (socket: Socket) => {
   }, 1000);
 
   const getDepthLevel = (time: number): number => {
-    if (time > 2 * 60) {
-      return 3;
-    } else if (time > 1 * 60) {
-      return 2;
-    } else if (time > 10) {
-      return 1;
-    }
-
-    return 2;
+    return 3;
   };
 
   const aiMove = async () => {
+    const board = game.exportJson();
     const isWhite = pieces === Pieces.WHITE;
     const engine = fork("./engine/index.ts");
 
-    engine.send([
-      game.exportFEN(),
-      getDepthLevel(isWhite ? whiteTime : blackTime),
-    ]);
+    if (!board.isFinished) {
+      engine.send([
+        game.exportFEN(),
+        getDepthLevel(isWhite ? whiteTime : blackTime),
+      ]);
 
-    const [from, to, evaluation] = await new Promise<any>((resolve) => {
-      engine.on("message", (bestMove) => resolve(bestMove));
-    });
+      const [from, to, evaluation] = await new Promise<any>((resolve) => {
+        engine.on("message", (bestMove) => resolve(bestMove));
+      });
 
-    console.log(from, to, evaluation);
-    game.move(from, to);
+      console.log(from, to, evaluation);
+      game.move(from, to);
+    }
 
     isWhite ? (blackTime += 3) : (whiteTime += 3);
     socket.emit(Actions.UPDATE_BOARD, game.exportJson());
