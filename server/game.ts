@@ -1,7 +1,6 @@
 import { Socket } from "socket.io";
 import Actions from "../common/actions";
 import Pieces from "../common/pieces";
-import findBestMove from "../engine/findBestMove";
 import { fork } from "child_process";
 
 const jsChess = require("js-chess-engine");
@@ -39,8 +38,6 @@ const game = async (socket: Socket) => {
   };
 
   const aiMove = async () => {
-    if (game.exportJson().isFinished) return;
-
     const isWhite = pieces === Pieces.WHITE;
     const engine = fork("./engine/index.ts");
 
@@ -49,12 +46,12 @@ const game = async (socket: Socket) => {
       getDepthLevel(isWhite ? whiteTime : blackTime),
     ]);
 
-    const bestMove = await new Promise<any>((resolve) => {
+    const [from, to, evaluation] = await new Promise<any>((resolve) => {
       engine.on("message", (bestMove) => resolve(bestMove));
     });
 
-    console.log(bestMove.from, bestMove.to, bestMove.evaluation);
-    game.move(bestMove.from, bestMove.to);
+    console.log(from, to, evaluation);
+    game.move(from, to);
 
     isWhite ? (blackTime += 3) : (whiteTime += 3);
     socket.emit(Actions.UPDATE_BOARD, game.exportJson());

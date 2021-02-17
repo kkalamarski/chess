@@ -1,11 +1,11 @@
 import evaluate from "./evaluate";
 import findBestMove from "./findBestMove";
 
-process.on("message", async ([FEN, depth]: [string, number]) => {
+process.on("message", ([FEN, depth]: [string, number]) => {
   const evaluation = evaluate(FEN, 0);
-  const bestMove = await findBestMove(FEN, depth);
+  const bestMove = findBestMove(FEN, depth);
 
-  console.log("Current evaluation:", evaluation);
+  console.log(bestMove);
 
   // @ts-ignore
   process?.send(bestMove);

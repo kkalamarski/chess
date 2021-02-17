@@ -1,55 +1,38 @@
+import getPossibleMoves from "./getPossibleMoves";
 import minimax from "./minimax";
 
 const jsChess = require("js-chess-engine");
 
-const findBestMove = async (FEN: string, depth: number) => {
+const findBestMove = (FEN: string, depth: number) => {
   const board = jsChess.status(FEN);
-  const moves = jsChess.moves(board);
-  const startingPoints = Object.keys(moves);
 
-  const possibleMoves = startingPoints.reduce(
-    (all: [string, string][], current: string) => {
-      const movesFromThisPosition = moves[current].map((move: string) => [
-        current,
-        move,
-      ]);
+  const possibleMoves = getPossibleMoves(FEN);
 
-      return [...all, ...movesFromThisPosition];
-    },
-    []
-  );
+  console.log(possibleMoves.length, "possible moves");
 
   console.time("Found AI move in:");
-  const evaluatedMoves = await Promise.all<[string, string, number]>(
-    possibleMoves.map(
-      ([from, to]) =>
-        new Promise((resolve) => {
-          setTimeout(async () => {
-            const position = jsChess.move(FEN, from, to);
-            const evaluation = await minimax(
-              position,
-              depth,
-              -Infinity,
-              Infinity
-            );
+  const evaluatedMoves: [string, string, number][] = possibleMoves.map(
+    ([from, to]) => {
+      const position = jsChess.move(FEN, from, to);
+      const evaluation = minimax(position, depth, -Infinity, Infinity);
+      console.log(`Evaluating move ${from} -> ${to} : ${evaluation}`);
 
-            resolve([from, to, evaluation]);
-          });
-        })
-    )
+      return [from, to, evaluation];
+    }
   );
+
   console.timeEnd("Found AI move in:");
   console.log("Engine depth:", depth);
 
   const sorted = evaluatedMoves
-    .sort((a, b) => Math.random() - Math.random()) // shuffle moves with the same evaluation
+    .sort(() => Math.random() - Math.random()) // shuffle moves with the same evaluation
     .sort((a, b) => (board.turn === "white" ? b[2] - a[2] : a[2] - b[2]));
 
-  return {
-    from: sorted?.[0]?.[0],
-    to: sorted?.[0]?.[1],
-    evaluation: sorted?.[0]?.[2],
-  };
+  const bestMove = sorted[0];
+
+  console.log(bestMove);
+
+  return bestMove;
 };
 
 export default findBestMove;
