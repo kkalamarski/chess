@@ -1,5 +1,7 @@
 FROM node:lts-alpine
 
+ENV PORT=80 
+
 # Create app directory
 WORKDIR /app
 
@@ -15,5 +17,5 @@ COPY . .
 
 RUN npm run build
 
-EXPOSE 3000
+EXPOSE 80
 CMD [ "npx", "ts-node", "index.ts" ]

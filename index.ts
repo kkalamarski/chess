@@ -4,6 +4,7 @@ import io from "socket.io";
 import path from "path";
 import game from "./server/game";
 
+const port = process.env.PORT || 3000;
 const app = express();
 const server = http.createServer(app);
 const socket = new io.Server(server);
@@ -16,6 +17,6 @@ app.get("/", (req, res) =>
   res.sendFile(path.join(__dirname, "dist/index.html"))
 );
 
-server.listen(3000, () =>
-  console.log(`Server listnening at http://localhost:3000`)
+server.listen(port, () =>
+  console.log(`Server listnening at http://localhost:${port}`)
 );
