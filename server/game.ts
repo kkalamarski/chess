@@ -26,7 +26,7 @@ const game = async (socket: Socket) => {
   }, 1000);
 
   const getDepthLevel = (time: number): number => {
-    return 3;
+    return 5;
   };
 
   const aiMove = async () => {

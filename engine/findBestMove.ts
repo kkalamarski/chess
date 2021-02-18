@@ -1,3 +1,4 @@
+import captureEvaluation from "./captureEvaluation";
 import getPossibleMoves from "./getPossibleMoves";
 import minimax from "./minimax";
 
@@ -12,8 +13,13 @@ const findBestMove = (FEN: string, depth: number) => {
 
   console.time("Found AI move in:");
   const alphaBeta = { alpha: -Infinity, beta: Infinity };
-  const evaluatedMoves: [string, string, number][] = possibleMoves.map(
-    ([from, to]) => {
+  const evaluatedMoves: [string, string, number][] = possibleMoves
+    .sort(
+      (move1, move2) =>
+        captureEvaluation(FEN, move1[0], move1[1]) -
+        captureEvaluation(FEN, move2[0], move2[1])
+    )
+    .map(([from, to]) => {
       const position = jsChess.move(FEN, from, to);
 
       console.time(`${from} -> ${to}`);
@@ -25,8 +31,7 @@ const findBestMove = (FEN: string, depth: number) => {
       );
 
       return [from, to, evaluation];
-    }
-  );
+    });
 
   console.timeEnd("Found AI move in:");
   console.log("Engine depth:", depth);

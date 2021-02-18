@@ -37,14 +37,13 @@ const calculatePiecePositionBonus = (pieces: { [x: string]: string }): number =>
       if (!squareTable) return 0;
 
       if (!isWhite) {
-        squareTable = squareTable.reverse();
+        squareTable = [...squareTable].reverse();
       }
 
-      const piecePositionBonus = mapArrayToChessboard(
-        pieceSquareTables?.[lowerPiece]
-      )[pos];
+      const squareValues = mapArrayToChessboard(squareTable);
+      const piecePositionBonus = squareValues[pos];
 
-      return (piecePositionBonus / 50) * (isWhite ? 1 : -1);
+      return piecePositionBonus * (isWhite ? 1 : -1);
     })
     .reduce((total, current) => total + current, 0);
 
