@@ -1,14 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Tile from "./Tile";
 // @ts-ignore
 import texture from "url:../../assets/texture.jpg";
-import usePieces from "../hooks/usePieces";
 import useEmitMove from "../hooks/useEmitMove";
 import useGameSettings from "../hooks/useGameSettings";
-import game from "../../../server/game";
 import Pieces from "../../../common/pieces";
-import { useGame } from "../providers/SocketProvider";
+import {
+  usePlayerMove,
+  usePossibleMoves,
+  useTurn,
+} from "../providers/ComputerGameProvider";
+
+const jsChess = require("js-chess-engine");
+
+interface ChessBoardProps {
+  FEN: string;
+  playerColor: Pieces;
+  onMove: (from: string, to: string) => void;
+}
 
 const ChessBoardWrapper = styled.section`
   width: 640px;
@@ -18,22 +28,34 @@ const ChessBoardWrapper = styled.section`
   background: url(${texture});
 `;
 
-const ChessBoard = () => {
-  const game = useGame();
-  const pieces = usePieces();
-  const emitMove = useEmitMove();
-  const gameSettings = useGameSettings();
+const ChessBoard: React.FC<ChessBoardProps> = ({
+  FEN,
+  playerColor,
+  onMove,
+}) => {
+  const [game, setGame] = useState<any>();
   const [selected, setSelected] = useState<string | null>(null);
-  const possibleMoves: string[] = selected
-    ? game?.board?.moves?.[selected.toUpperCase()] ?? []
-    : [];
+  const possibleMoves = usePossibleMoves(selected || "");
+  const turn = useTurn();
+
+  useEffect(() => {
+    const game = jsChess.status(FEN);
+
+    setGame(game);
+  }, [FEN]);
+
+  if (!game) return <div>Loading</div>;
+
+  const pieces = game.pieces;
 
   const onTileClick = (tile: string, piece: string) => () => {
+    if (turn !== playerColor) return;
+
     if (!selected && !!piece) {
       const pieceColor =
         piece.toLowerCase() === piece ? Pieces.BLACK : Pieces.WHITE;
 
-      if (pieceColor === gameSettings?.pieces) setSelected(tile);
+      if (pieceColor === playerColor) setSelected(tile);
       return;
     }
 
@@ -43,7 +65,7 @@ const ChessBoard = () => {
     }
 
     if (selected) {
-      emitMove(selected, tile);
+      onMove(selected, tile);
       setSelected(null);
       return;
     }
@@ -72,7 +94,7 @@ const ChessBoard = () => {
     });
 
   // Flip the board for black pieces
-  if (gameSettings?.pieces === Pieces.BLACK) {
+  if (playerColor === Pieces.BLACK) {
     tiles = tiles.reverse();
   }
 
