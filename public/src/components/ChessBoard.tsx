@@ -3,14 +3,8 @@ import styled from "styled-components";
 import Tile from "./Tile";
 // @ts-ignore
 import texture from "url:../../assets/texture.jpg";
-import useEmitMove from "../hooks/useEmitMove";
-import useGameSettings from "../hooks/useGameSettings";
 import Pieces from "../../../common/pieces";
-import {
-  usePlayerMove,
-  usePossibleMoves,
-  useTurn,
-} from "../providers/ComputerGameProvider";
+import { usePossibleMoves, useTurn } from "../providers/ComputerGameProvider";
 
 const jsChess = require("js-chess-engine");
 
@@ -65,7 +59,9 @@ const ChessBoard: React.FC<ChessBoardProps> = ({
     }
 
     if (selected) {
-      onMove(selected, tile);
+      if (possibleMoves.includes(tile.toUpperCase())) {
+        onMove(selected, tile.toUpperCase());
+      }
       setSelected(null);
       return;
     }
@@ -78,7 +74,12 @@ const ChessBoard: React.FC<ChessBoardProps> = ({
       const file = "abcdefgh"[i % 8];
       const row = -Math.floor(i / 8) + 8;
       const tile = file + row;
-      const piece = pieces?.[tile.toUpperCase()];
+      const piece: string = pieces?.[tile.toUpperCase()] ?? "";
+      const pieceColor =
+        piece.toLowerCase() === piece ? Pieces.BLACK : Pieces.WHITE;
+
+      const check =
+        piece.toLowerCase() === "k" && game.check && pieceColor === game.turn;
 
       return (
         <Tile
@@ -86,6 +87,7 @@ const ChessBoard: React.FC<ChessBoardProps> = ({
           tile={tile}
           key={tile}
           selected={tile === selected}
+          check={check}
           piece={piece}
           onTileClick={onTileClick(tile, piece)}
           possibleMove={possibleMoves.includes(tile.toUpperCase())}

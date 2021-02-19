@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import findBestMove from "../../engine/webWorker";
 import ChessBoard from "../src/components/ChessBoard";
 import GameWrapper from "../src/components/GameWrapper";
 import {
@@ -14,7 +15,11 @@ const ComputerGame = () => {
 
   useEffect(() => {
     if (turn !== state.playerColor) {
-      console.log("Computer Move");
+      (async () => {
+        const [from, to] = await findBestMove(state.FEN, 10);
+
+        onPlayerMove(from, to);
+      })();
     }
   }, [state.FEN, turn]);
 

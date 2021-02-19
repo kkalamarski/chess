@@ -7,6 +7,7 @@ interface TileProps {
   piece: string;
   tile: string;
   selected: boolean;
+  check: boolean;
   possibleMove: boolean;
   onTileClick: React.MouseEventHandler<HTMLDivElement>;
 }
@@ -58,6 +59,7 @@ const Tile: React.FC<TileProps> = ({
   tile,
   piece,
   selected,
+  check,
   possibleMove,
   onTileClick,
 }) => {
@@ -65,7 +67,7 @@ const Tile: React.FC<TileProps> = ({
 
   return (
     <TileWrapper
-      color={selected ? "#04724D" : color}
+      color={selected ? "#04724D" : check ? "red" : color}
       onClick={onTileClick}
       role="button"
     >

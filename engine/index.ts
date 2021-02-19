@@ -7,3 +7,10 @@ process.on("message", async ([FEN, depth]: [string, number]) => {
   process?.send(bestMove);
   process.disconnect();
 });
+
+addEventListener("message", async ({ data: [FEN, depth] }) => {
+  const bestMove = await findBestMove(FEN, depth);
+
+  // @ts-ignore
+  postMessage(bestMove);
+});
