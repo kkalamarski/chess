@@ -5,9 +5,13 @@ export interface ComputerGameState {
   turn: Pieces;
   playerColor: Pieces;
   FEN: string;
+  whiteTime: number;
+  blackTime: number;
 }
 
 export const defaultState: ComputerGameState = {
+  whiteTime: 5 * 60,
+  blackTime: 5 * 60,
   turn: Pieces.WHITE,
   playerColor: Pieces.WHITE,
   FEN: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", // starting position
@@ -24,6 +28,13 @@ const computerGameReducer = (state: ComputerGameState, action: Action) => {
   switch (action.type) {
     case ComputerGameActionTypes.UPDATE_FEN:
       return { ...state, FEN: action.data };
+
+    case ComputerGameActionTypes.TIME:
+      return {
+        ...state,
+        whiteTime: action.data.whiteTime,
+        blackTime: action.data.blackTime,
+      };
 
     default:
       return state;

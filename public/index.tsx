@@ -3,9 +3,11 @@ import { render } from "react-dom";
 import { createGlobalStyle } from "styled-components";
 import ComputerGame from "./games/ComputerGame";
 
-import Game from "./src/components/Game";
 import ComputerGameProvider from "./src/providers/ComputerGameProvider";
-import SocketProvider from "./src/providers/SocketProvider";
+
+import "antd/dist/antd.css";
+import "antd/dist/antd.dark.css";
+import "antd/dist/antd.compact.css";
 
 const GlobalStyles = createGlobalStyle`
   @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');

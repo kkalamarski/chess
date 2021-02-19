@@ -32,33 +32,33 @@ const calculateSpritePosition = (p: { piece: string; color: string }) => {
     y = 0;
 
   if (p.color === Pieces.WHITE) {
-    y = -222;
+    y = -60;
   } else {
-    y = -95;
-  }
-
-  if (p.piece === "K") {
-    x = 5;
+    y = 0;
   }
 
   if (p.piece === "Q") {
-    x = -144;
+    x = 0;
+  }
+
+  if (p.piece === "K") {
+    x = -60;
   }
 
   if (p.piece === "R") {
-    x = -290;
-  }
-
-  if (p.piece === "B") {
-    x = -438;
+    x = -120;
   }
 
   if (p.piece === "N") {
-    x = -587;
+    x = -180;
+  }
+
+  if (p.piece === "B") {
+    x = -240;
   }
 
   if (p.piece === "P") {
-    x = -735;
+    x = -300;
   }
 
   return css`
@@ -72,11 +72,11 @@ const PieceIcon = styled.img.attrs({ src: pieces })<{
 }>`
   object-fit: none;
   object-position: 0 0;
-  width: 80px;
-  height: 80px;
-  transform: scale(0.8);
+  width: 60px;
+  height: 60px;
+  transform: scale(1.3);
 
-  ${calculateSpritePosition}
+  ${calculateSpritePosition};
 `;
 
 const Piece: React.FC<{ piece: string }> = ({ piece }) => {

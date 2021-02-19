@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import Tile from "./Tile";
 // @ts-ignore
 import texture from "url:../../assets/texture.jpg";
 import Pieces from "../../../common/pieces";
 import { usePossibleMoves, useTurn } from "../providers/ComputerGameProvider";
+import { Modal } from "antd";
+import Sidebar from "./Sidebar";
 
 const jsChess = require("js-chess-engine");
 
@@ -14,9 +16,21 @@ interface ChessBoardProps {
   onMove: (from: string, to: string) => void;
 }
 
-const ChessBoardWrapper = styled.section`
-  width: 640px;
+const ChessBoardWrapper = styled.div`
+  width: 1000px;
+  max-width: 1000px;
   height: 640px;
+  max-height: 640px;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+`;
+
+const StyledChessBoard = styled.div`
+  width: 640px;
+  max-width: 640px;
+  height: 640px;
+  max-height: 640px;
   display: grid;
   grid-template-columns: repeat(8, 1fr);
   background: url(${texture});
@@ -27,10 +41,12 @@ const ChessBoard: React.FC<ChessBoardProps> = ({
   playerColor,
   onMove,
 }) => {
+  const [endModal, setEndModal] = useState(true);
   const [game, setGame] = useState<any>();
   const [selected, setSelected] = useState<string | null>(null);
   const possibleMoves = usePossibleMoves(selected || "");
   const turn = useTurn();
+  const chessBoardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const game = jsChess.status(FEN);
@@ -100,7 +116,25 @@ const ChessBoard: React.FC<ChessBoardProps> = ({
     tiles = tiles.reverse();
   }
 
-  return <ChessBoardWrapper>{tiles}</ChessBoardWrapper>;
+  return (
+    <ChessBoardWrapper ref={chessBoardRef}>
+      <StyledChessBoard>{tiles}</StyledChessBoard>
+      <Sidebar />
+      {chessBoardRef.current && (
+        <Modal
+          visible={game.isFinished && endModal}
+          footer={false}
+          centered={true}
+          title={false}
+          getContainer={chessBoardRef.current}
+          width={200}
+          onCancel={() => setEndModal(false)}
+        >
+          {game.checkMate ? "Checkmate!" : "Stalemate!"}
+        </Modal>
+      )}
+    </ChessBoardWrapper>
+  );
 };
 
 export default ChessBoard;
