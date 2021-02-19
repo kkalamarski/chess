@@ -1,9 +1,13 @@
 import React from "react";
 import { render } from "react-dom";
 import { createGlobalStyle } from "styled-components";
+import ComputerGame from "./games/ComputerGame";
 
-import Game from "./src/components/Game";
-import SocketProvider from "./src/providers/SocketProvider";
+import ComputerGameProvider from "./src/providers/ComputerGameProvider";
+
+import "antd/dist/antd.css";
+import "antd/dist/antd.dark.css";
+import "antd/dist/antd.compact.css";
 
 const GlobalStyles = createGlobalStyle`
   @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
@@ -17,10 +21,13 @@ const GlobalStyles = createGlobalStyle`
 `;
 
 const Chess = () => (
-  <SocketProvider>
+  <ComputerGameProvider>
+    {/* <SocketProvider> */}
     <GlobalStyles />
-    <Game />
-  </SocketProvider>
+    {/* <Game /> */}
+    <ComputerGame />
+    {/* </SocketProvider> */}
+  </ComputerGameProvider>
 );
 
 render(<Chess />, document.querySelector("#Root"));

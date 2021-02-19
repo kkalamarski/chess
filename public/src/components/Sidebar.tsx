@@ -1,8 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 import Pieces from "../../../common/pieces";
+import { useComputerGame } from "../providers/ComputerGameProvider";
 import { useGame } from "../providers/SocketProvider";
 import Timer from "./Timer";
+
+const jsChess = require("js-chess-engine");
 
 const SidebarWrapper = styled.aside`
   display: flex;
@@ -16,20 +19,19 @@ const SidebarWrapper = styled.aside`
 `;
 
 const Sidebar = () => {
-  const game = useGame();
-  const playerPieces = game?.settings?.pieces;
-  const turn = game?.board?.turn;
+  const [state, dispatch] = useComputerGame();
+  const game = jsChess.status(state.FEN);
 
   const computerTime =
-    playerPieces === Pieces.WHITE ? game?.blackTime : game?.whiteTime;
+    state.playerColor === Pieces.WHITE ? state.blackTime : state.whiteTime;
   const playerTime =
-    playerPieces === Pieces.BLACK ? game?.blackTime : game?.whiteTime;
+    state.playerColor === Pieces.BLACK ? state.blackTime : state.whiteTime;
 
   return (
     <SidebarWrapper>
       {!!computerTime && (
         <Timer
-          active={turn !== playerPieces}
+          active={game.turn !== state.playerColor}
           low={computerTime < 60}
           time={computerTime}
         />
@@ -37,7 +39,7 @@ const Sidebar = () => {
       <hr style={{ width: "100%" }} />
       {!!playerTime && (
         <Timer
-          active={turn === playerPieces}
+          active={game.turn === state.playerColor}
           low={playerTime < 60}
           time={playerTime}
         />

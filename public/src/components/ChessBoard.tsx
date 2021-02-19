@@ -1,39 +1,71 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import Tile from "./Tile";
 // @ts-ignore
 import texture from "url:../../assets/texture.jpg";
-import usePieces from "../hooks/usePieces";
-import useEmitMove from "../hooks/useEmitMove";
-import useGameSettings from "../hooks/useGameSettings";
-import game from "../../../server/game";
 import Pieces from "../../../common/pieces";
-import { useGame } from "../providers/SocketProvider";
+import { usePossibleMoves, useTurn } from "../providers/ComputerGameProvider";
+import { Modal } from "antd";
+import Sidebar from "./Sidebar";
 
-const ChessBoardWrapper = styled.section`
-  width: 640px;
+const jsChess = require("js-chess-engine");
+
+interface ChessBoardProps {
+  FEN: string;
+  playerColor: Pieces;
+  onMove: (from: string, to: string) => void;
+}
+
+const ChessBoardWrapper = styled.div`
+  width: 1000px;
+  max-width: 1000px;
   height: 640px;
+  max-height: 640px;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+`;
+
+const StyledChessBoard = styled.div`
+  width: 640px;
+  max-width: 640px;
+  height: 640px;
+  max-height: 640px;
   display: grid;
   grid-template-columns: repeat(8, 1fr);
   background: url(${texture});
 `;
 
-const ChessBoard = () => {
-  const game = useGame();
-  const pieces = usePieces();
-  const emitMove = useEmitMove();
-  const gameSettings = useGameSettings();
+const ChessBoard: React.FC<ChessBoardProps> = ({
+  FEN,
+  playerColor,
+  onMove,
+}) => {
+  const [endModal, setEndModal] = useState(true);
+  const [game, setGame] = useState<any>();
   const [selected, setSelected] = useState<string | null>(null);
-  const possibleMoves: string[] = selected
-    ? game?.board?.moves?.[selected.toUpperCase()] ?? []
-    : [];
+  const possibleMoves = usePossibleMoves(selected || "");
+  const turn = useTurn();
+  const chessBoardRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const game = jsChess.status(FEN);
+
+    setGame(game);
+  }, [FEN]);
+
+  if (!game) return <div>Loading</div>;
+
+  const pieces = game.pieces;
 
   const onTileClick = (tile: string, piece: string) => () => {
+    if (turn !== playerColor) return;
+
     if (!selected && !!piece) {
       const pieceColor =
         piece.toLowerCase() === piece ? Pieces.BLACK : Pieces.WHITE;
 
-      if (pieceColor === gameSettings?.pieces) setSelected(tile);
+      if (pieceColor === playerColor) setSelected(tile);
       return;
     }
 
@@ -43,7 +75,9 @@ const ChessBoard = () => {
     }
 
     if (selected) {
-      emitMove(selected, tile);
+      if (possibleMoves.includes(tile.toUpperCase())) {
+        onMove(selected, tile.toUpperCase());
+      }
       setSelected(null);
       return;
     }
@@ -56,7 +90,12 @@ const ChessBoard = () => {
       const file = "abcdefgh"[i % 8];
       const row = -Math.floor(i / 8) + 8;
       const tile = file + row;
-      const piece = pieces?.[tile.toUpperCase()];
+      const piece: string = pieces?.[tile.toUpperCase()] ?? "";
+      const pieceColor =
+        piece.toLowerCase() === piece ? Pieces.BLACK : Pieces.WHITE;
+
+      const check =
+        piece.toLowerCase() === "k" && game.check && pieceColor === game.turn;
 
       return (
         <Tile
@@ -64,6 +103,7 @@ const ChessBoard = () => {
           tile={tile}
           key={tile}
           selected={tile === selected}
+          check={check}
           piece={piece}
           onTileClick={onTileClick(tile, piece)}
           possibleMove={possibleMoves.includes(tile.toUpperCase())}
@@ -72,11 +112,29 @@ const ChessBoard = () => {
     });
 
   // Flip the board for black pieces
-  if (gameSettings?.pieces === Pieces.BLACK) {
+  if (playerColor === Pieces.BLACK) {
     tiles = tiles.reverse();
   }
 
-  return <ChessBoardWrapper>{tiles}</ChessBoardWrapper>;
+  return (
+    <ChessBoardWrapper ref={chessBoardRef}>
+      <StyledChessBoard>{tiles}</StyledChessBoard>
+      <Sidebar />
+      {chessBoardRef.current && (
+        <Modal
+          visible={game.isFinished && endModal}
+          footer={false}
+          centered={true}
+          title={false}
+          getContainer={chessBoardRef.current}
+          width={200}
+          onCancel={() => setEndModal(false)}
+        >
+          {game.checkMate ? "Checkmate!" : "Stalemate!"}
+        </Modal>
+      )}
+    </ChessBoardWrapper>
+  );
 };
 
 export default ChessBoard;

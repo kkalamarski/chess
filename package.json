@@ -13,6 +13,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@babel/polyfill": "^7.12.1",
+    "antd": "^4.12.3",
     "express": "^4.17.1",
     "js-chess-engine": "^0.6.1",
     "react": "^17.0.1",
@@ -24,6 +26,12 @@
     "styled-components": "^5.2.1"
   },
   "devDependencies": {
+    "@babel/cli": "^7.12.17",
+    "@babel/core": "^7.12.17",
+    "@babel/plugin-syntax-dynamic-import": "^7.8.3",
+    "@babel/preset-env": "^7.12.17",
+    "@babel/preset-react": "^7.12.13",
+    "@babel/preset-typescript": "^7.12.17",
     "@types/express": "^4.17.11",
     "@types/node": "^14.14.27",
     "@types/react": "^17.0.2",
