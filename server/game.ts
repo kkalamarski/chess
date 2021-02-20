@@ -44,7 +44,6 @@ const game = async (socket: Socket) => {
         engine.on("message", (bestMove) => resolve(bestMove));
       });
 
-      console.log(from, to, evaluation);
       game.move(from, to);
     }
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import Tile from "./Tile";
 // @ts-ignore
@@ -7,6 +7,7 @@ import Pieces from "../../../common/pieces";
 import { usePossibleMoves, useTurn } from "../providers/ComputerGameProvider";
 import { Modal } from "antd";
 import Sidebar from "./Sidebar";
+import useViewport from "../hooks/useViewport";
 
 const jsChess = require("js-chess-engine");
 
@@ -19,17 +20,22 @@ interface ChessBoardProps {
 const ChessBoardWrapper = styled.div`
   width: 1000px;
   max-width: 1000px;
-  height: 640px;
-  max-height: 640px;
+  height: 100vh;
   position: relative;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+
+  @media (max-width: 1000px) {
+    flex-direction: column;
+    justify-content: space-around;
+  }
 `;
 
-const StyledChessBoard = styled.div`
-  width: 640px;
+const StyledChessBoard = styled.div<{ width: number }>`
+  width: ${(p) => p.width - 30}px;
   max-width: 640px;
-  height: 640px;
+  height: ${(p) => p.width - 30}px;
   max-height: 640px;
   display: grid;
   grid-template-columns: repeat(8, 1fr);
@@ -47,6 +53,7 @@ const ChessBoard: React.FC<ChessBoardProps> = ({
   const possibleMoves = usePossibleMoves(selected || "");
   const turn = useTurn();
   const chessBoardRef = useRef<HTMLDivElement>(null);
+  const { width } = useViewport();
 
   useEffect(() => {
     const game = jsChess.status(FEN);
@@ -118,7 +125,7 @@ const ChessBoard: React.FC<ChessBoardProps> = ({
 
   return (
     <ChessBoardWrapper ref={chessBoardRef}>
-      <StyledChessBoard>{tiles}</StyledChessBoard>
+      <StyledChessBoard width={width}>{tiles}</StyledChessBoard>
       <Sidebar />
       {chessBoardRef.current && (
         <Modal

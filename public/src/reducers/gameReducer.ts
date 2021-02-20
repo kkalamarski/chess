@@ -6,8 +6,6 @@ interface Action {
 }
 
 const gameReducer = (state: any, action: Action) => {
-  console.log(state, action);
-
   switch (action.type) {
     case Actions.UPDATE_BOARD:
       return { ...state, board: action.data };
