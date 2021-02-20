@@ -125,7 +125,9 @@ const ChessBoard: React.FC<ChessBoardProps> = ({
 
   return (
     <ChessBoardWrapper ref={chessBoardRef}>
+
       <StyledChessBoard width={width}>{tiles}</StyledChessBoard>
+
       <Sidebar />
       {chessBoardRef.current && (
         <Modal

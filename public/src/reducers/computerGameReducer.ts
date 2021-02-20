@@ -23,6 +23,7 @@ interface Action {
 }
 
 const computerGameReducer = (state: ComputerGameState, action: Action) => {
+
   switch (action.type) {
     case ComputerGameActionTypes.UPDATE_FEN:
       return { ...state, FEN: action.data };
