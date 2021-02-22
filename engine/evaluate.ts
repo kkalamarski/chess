@@ -3,10 +3,10 @@ import calculatePiecePositionBonus from "./evaluation/calculatePiecePositionBonu
 
 const jsChess = require("js-chess-engine");
 
-const evaluate = (FEN: string, depth: number): number => {
+const evaluate = (FEN: string): number => {
   const { pieces, turn, checkMate, moves } = jsChess.status(FEN);
 
-  if (checkMate) return turn === "white" ? Infinity : -Infinity;
+  if (checkMate) return turn === "black" ? Infinity : -Infinity;
 
   if (moves.length === 0) return 0;
 

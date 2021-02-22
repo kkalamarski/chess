@@ -19,7 +19,7 @@ const ComputerGame = () => {
   useEffect(() => {
     if (turn !== state.playerColor) {
       (async () => {
-        const [from, to] = await findBestMove(state.FEN, 50);
+        const [from, to] = await findBestMove(state.FEN, state.depth);
 
         onPlayerMove(from, to);
       })();
@@ -28,6 +28,8 @@ const ComputerGame = () => {
 
   useEffect(() => {
     const game = jsChess.status(state.FEN);
+
+    if (game.fullMove <= 1) return;
 
     if (!game.isFinished && state.whiteTime > 0 && state.blackTime > 0) {
       const blackTime =
