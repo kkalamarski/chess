@@ -6,13 +6,18 @@ import texture from "url:../../assets/texture.jpg";
 import Pieces from "../../../common/pieces";
 import { usePossibleMoves, useTurn } from "../providers/ComputerGameProvider";
 import { Modal } from "antd";
-import Sidebar from "./Sidebar";
 import useViewport from "../hooks/useViewport";
+import MovesBox from "./MovesBox";
+import Timer from "./Timer";
+import EngineLevelPicker from "./EngineLevelPicker";
+import GameButtons from "./GameButtons";
+import LoadingScreen from "./LoadingScreen";
 
 const jsChess = require("js-chess-engine");
 
 interface ChessBoardProps {
   FEN: string;
+  PGN: string;
   playerColor: Pieces;
   onMove: (from: string, to: string) => void;
 }
@@ -21,15 +26,18 @@ const ChessBoardWrapper = styled.div`
   width: 1000px;
   max-width: 1000px;
   height: 100vh;
+  max-height: 640px;
   position: relative;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  display: grid;
+  color: white;
 
-  @media (max-width: 1000px) {
-    flex-direction: column;
-    justify-content: space-around;
-  }
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr;
+  grid-template-areas:
+    "board board board level"
+    "board board board timer"
+    "board board board moves"
+    "board board board buttons";
 `;
 
 const StyledChessBoard = styled.div<{ width: number }>`
@@ -40,10 +48,12 @@ const StyledChessBoard = styled.div<{ width: number }>`
   display: grid;
   grid-template-columns: repeat(8, 1fr);
   background: url(${texture});
+  grid-area: board;
 `;
 
 const ChessBoard: React.FC<ChessBoardProps> = ({
   FEN,
+  PGN,
   playerColor,
   onMove,
 }) => {
@@ -61,7 +71,7 @@ const ChessBoard: React.FC<ChessBoardProps> = ({
     setGame(game);
   }, [FEN]);
 
-  if (!game) return <div>Loading</div>;
+  if (!game) return <LoadingScreen />;
 
   const pieces = game.pieces;
 
@@ -125,10 +135,11 @@ const ChessBoard: React.FC<ChessBoardProps> = ({
 
   return (
     <ChessBoardWrapper ref={chessBoardRef}>
-
       <StyledChessBoard width={width}>{tiles}</StyledChessBoard>
-
-      <Sidebar />
+      <MovesBox PGN={PGN} />
+      <Timer />
+      <EngineLevelPicker />
+      <GameButtons />
       {chessBoardRef.current && (
         <Modal
           visible={game.isFinished && endModal}

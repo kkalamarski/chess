@@ -1,5 +1,8 @@
 import React, { useContext, useReducer } from "react";
-import { updateFENAction } from "../../actions/computerGameActions";
+import {
+  registerMoveAction,
+  updateFENAction,
+} from "../../actions/computerGameActions";
 import computerGameReducer, {
   ComputerGameState,
   defaultState,
@@ -34,6 +37,7 @@ export const usePlayerMove = () => {
     const FEN = jsChess.move(state.FEN, from, to);
 
     dispatch(updateFENAction(FEN));
+    dispatch(registerMoveAction([from, to]));
   };
 };
 
