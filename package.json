@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "concurrently \"parcel watch public/index.html --public-url /public --dist-dir dist\" \"nodemon --exec ts-node index.ts\"",
     "build": "parcel build public/index.html --public-url /public --dist-dir dist",
+    "server": "ts-node ./index.ts",
     "docker": "docker build -t kkalamarski/chess:latest .",
     "docker:run": "docker run -p 3000:80 kkalamarski/chess",
     "test": "jest"
