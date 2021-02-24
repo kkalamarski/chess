@@ -41,18 +41,33 @@ const playMoveFromOpeningBook = (
 };
 
 const ComputerGame = () => {
-  const [openings, setOpenings] = useState<any>();
+  const [openings, setOpenings] = useState<string[]>([]);
   const [state, dispatch] = useComputerGame();
   const turn = useTurn();
   const onPlayerMove = usePlayerMove();
 
   useEffect(() => {
-    import("../../engine/opening_book").then((openings) =>
-      setOpenings(openings)
-    );
+    (async () => {
+      const book1: any = await import("../../engine/opening_book1.json");
+      setOpenings(book1.default.default);
+
+      const book2: any = await import("../../engine/opening_book2.json");
+      setOpenings((openings) => openings.concat(book2.default.default));
+
+      const book3: any = await import("../../engine/opening_book3.json");
+      setOpenings((openings) => openings.concat(book3.default.default));
+
+      const book4: any = await import("../../engine/opening_book4.json");
+      setOpenings((openings) => openings.concat(book4.default.default));
+
+      const book5: any = await import("../../engine/opening_book5.json");
+      setOpenings((openings) => openings.concat(book5.default.default));
+    })();
   }, []);
 
   useEffect(() => {
+    if (!openings.length) return;
+
     if (turn !== state.playerColor) {
       (async () => {
         try {
@@ -62,6 +77,7 @@ const ComputerGame = () => {
             state.startingFEN,
             state.moves
           );
+          console.log("Playing", from, "->", to, "from opening book.");
           onPlayerMove(from, to);
         } catch (e) {
           const [from, to] = await findBestMove(state.FEN, state.depth);
@@ -70,7 +86,7 @@ const ComputerGame = () => {
         }
       })();
     }
-  }, [state.FEN, turn, state.playerColor]);
+  }, [state.FEN, turn, state.playerColor, openings?.length]);
 
   useEffect(() => {
     const game = jsChess.status(state.FEN);
