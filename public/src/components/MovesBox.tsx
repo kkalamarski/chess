@@ -1,5 +1,7 @@
-import React from "react";
+import { Button, Modal } from "antd";
+import React, { useState } from "react";
 import styled from "styled-components";
+import useViewport from "../hooks/useViewport";
 
 const PgnViewerBox = styled.section`
   font-size: 1rem;
@@ -17,6 +19,24 @@ const PgnViewer = styled.article`
 `;
 
 const MovesBox: React.FC<{ PGN: string }> = ({ PGN }) => {
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const { width } = useViewport();
+
+  if (width < 1000)
+    return (
+      <PgnViewerBox>
+        <Button onClick={() => setModalOpen(true)}>Moves</Button>
+        <Modal
+          visible={modalOpen}
+          footer={false}
+          title={false}
+          onCancel={() => setModalOpen(false)}
+        >
+          <PgnViewer>{PGN}</PgnViewer>
+        </Modal>
+      </PgnViewerBox>
+    );
+
   return (
     <PgnViewerBox>
       <strong>Moves:</strong>
