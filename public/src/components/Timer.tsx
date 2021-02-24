@@ -13,7 +13,7 @@ const TimerStyle = styled.div<{ active: boolean; low: boolean }>`
 
 const StyledTimer: React.FC<{
   active: boolean;
-  player: boolean;
+  player?: boolean;
   low: boolean;
   time: number;
 }> = ({ active, low, time, player }) => {
@@ -48,15 +48,15 @@ const TimerBox = styled.section`
 
   @media (min-width: 1000px) {
     font-size: 3rem;
-    display: block;
+    /* display: block; */
 
-    hr {
+    /* hr {
       display: initial;
-    }
+    } */
 
-    .label {
+    /* .label {
       display: none;
-    }
+    } */
   }
 `;
 

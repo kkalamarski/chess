@@ -49,19 +49,31 @@ const ComputerGame = () => {
   useEffect(() => {
     (async () => {
       const book1: any = await import("../../engine/opening_book1.json");
-      setOpenings(book1.default);
+      setOpenings(book1.default.default ?? book1.default);
 
-      const book2: any = await import("../../engine/opening_book2.json");
-      setOpenings((openings) => openings.concat(book2.default));
+      try {
+        const book2: any = await import("../../engine/opening_book2.json");
+        setOpenings((openings) =>
+          openings.concat(book2.default.default ?? book2.default)
+        );
 
-      const book3: any = await import("../../engine/opening_book3.json");
-      setOpenings((openings) => openings.concat(book3.default));
+        const book3: any = await import("../../engine/opening_book3.json");
+        setOpenings((openings) =>
+          openings.concat(book3.default.default ?? book3.default)
+        );
 
-      const book4: any = await import("../../engine/opening_book4.json");
-      setOpenings((openings) => openings.concat(book4.default));
+        const book4: any = await import("../../engine/opening_book4.json");
+        setOpenings((openings) =>
+          openings.concat(book4.default.default ?? book4.default)
+        );
 
-      const book5: any = await import("../../engine/opening_book5.json");
-      setOpenings((openings) => openings.concat(book5.default));
+        const book5: any = await import("../../engine/opening_book5.json");
+        setOpenings((openings) =>
+          openings.concat(book5.default.default ?? book5.default)
+        );
+      } catch (e) {
+        console.log("error loading opening books");
+      }
     })();
   }, []);
 
