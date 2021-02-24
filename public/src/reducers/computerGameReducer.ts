@@ -32,7 +32,6 @@ interface Action {
 }
 
 const computerGameReducer = (state: ComputerGameState, action: Action) => {
-  console.log(action);
   switch (action.type) {
     case ComputerGameActionTypes.SET_ENGINE_DEPTH:
       return { ...state, depth: action.data };
