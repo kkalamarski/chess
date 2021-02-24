@@ -13,14 +13,16 @@ const TimerStyle = styled.div<{ active: boolean; low: boolean }>`
 
 const StyledTimer: React.FC<{
   active: boolean;
+  player: boolean;
   low: boolean;
   time: number;
-}> = ({ active, low, time }) => {
+}> = ({ active, low, time, player }) => {
   const minutes = Math.floor(time / 60);
   const seconds = time % 60;
 
   return (
     <TimerStyle active={active} low={low}>
+      <div className="label">{player ? "Player" : "Computer"}</div>
       {(minutes > 9 ? minutes : "0" + minutes) +
         ":" +
         (seconds > 9 ? seconds : "0" + seconds)}
@@ -30,7 +32,32 @@ const StyledTimer: React.FC<{
 
 const TimerBox = styled.section`
   grid-area: timer;
-  font-size: 3rem;
+  display: flex;
+  font-size: 2rem;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+
+  hr {
+    display: none;
+  }
+
+  .label {
+    text-align: left;
+    font-size: 0.7rem;
+  }
+
+  @media (min-width: 1000px) {
+    font-size: 3rem;
+    display: block;
+
+    hr {
+      display: initial;
+    }
+
+    .label {
+      display: none;
+    }
+  }
 `;
 
 const Timer = () => {
@@ -54,6 +81,7 @@ const Timer = () => {
       <hr style={{ width: "100%" }} />
       {!!playerTime && (
         <StyledTimer
+          player
           active={game.turn === state.playerColor}
           low={playerTime < 60}
           time={playerTime}

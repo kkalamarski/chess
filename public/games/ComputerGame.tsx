@@ -49,24 +49,24 @@ const ComputerGame = () => {
   useEffect(() => {
     (async () => {
       const book1: any = await import("../../engine/opening_book1.json");
-      setOpenings(book1.default.default);
+      setOpenings(book1.default);
 
       const book2: any = await import("../../engine/opening_book2.json");
-      setOpenings((openings) => openings.concat(book2.default.default));
+      setOpenings((openings) => openings.concat(book2.default));
 
       const book3: any = await import("../../engine/opening_book3.json");
-      setOpenings((openings) => openings.concat(book3.default.default));
+      setOpenings((openings) => openings.concat(book3.default));
 
       const book4: any = await import("../../engine/opening_book4.json");
-      setOpenings((openings) => openings.concat(book4.default.default));
+      setOpenings((openings) => openings.concat(book4.default));
 
       const book5: any = await import("../../engine/opening_book5.json");
-      setOpenings((openings) => openings.concat(book5.default.default));
+      setOpenings((openings) => openings.concat(book5.default));
     })();
   }, []);
 
   useEffect(() => {
-    if (!openings.length) return;
+    if (!openings?.length) return;
 
     if (turn !== state.playerColor) {
       (async () => {

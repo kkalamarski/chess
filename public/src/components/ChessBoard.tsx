@@ -23,21 +23,34 @@ interface ChessBoardProps {
 }
 
 const ChessBoardWrapper = styled.div`
-  width: 1000px;
+  width: 100%;
   max-width: 1000px;
   height: 100vh;
-  max-height: 640px;
+
   position: relative;
   display: grid;
   color: white;
 
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 1fr 4fr 1fr 1fr;
   grid-template-areas:
-    "board board board level"
-    "board board board timer"
-    "board board board moves"
-    "board board board buttons";
+    "level"
+    "timer"
+    "board"
+    "moves"
+    "buttons";
+
+  @media (min-width: 1000px) {
+    max-height: 640px;
+
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+    grid-template-areas:
+      "board board board level"
+      "board board board timer"
+      "board board board moves"
+      "board board board buttons";
+  }
 `;
 
 const StyledChessBoard = styled.div<{ width: number }>`
