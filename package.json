@@ -2,7 +2,6 @@
   "name": "chess",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/index.html",
   "scripts": {
     "dev": "concurrently \"parcel watch public/index.html --public-url /public --dist-dir dist\" \"nodemon --exec ts-node index.ts\"",
     "build": "parcel build public/index.html --public-url /public --dist-dir dist",
@@ -16,6 +15,7 @@
   "license": "ISC",
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
+    "@types/service_worker_api": "0.0.9",
     "antd": "^4.12.3",
     "express": "^4.17.1",
     "js-chess-engine": "^0.6.1",
@@ -44,6 +44,7 @@
     "jest": "^26.6.3",
     "nodemon": "^2.0.7",
     "parcel": "^2.0.0-beta.1",
+    "parcel-plugin-sw-precache": "^1.1.2",
     "ts-jest": "^26.5.1",
     "ts-node": "^9.1.1",
     "typescript": "^4.1.5"
