@@ -80,7 +80,7 @@ const PieceIcon = styled.img.attrs({ src: pieces })<{
   transform: scale(0.15);
 
   @media (max-width: 1000px) {
-    transform: scale(0.15);
+    transform: scale(0.09);
   }
 
   ${calculateSpritePosition};

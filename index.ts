@@ -11,6 +11,11 @@ const socket = new io.Server(server)
 
 socket.on('connection', game)
 
+app.use((req, res, next) => {
+  res.set('Service-Worker-Allowed', '/')
+  next()
+})
+
 app.use('/public', express.static('dist'))
 
 app.get('/', (req, res) =>

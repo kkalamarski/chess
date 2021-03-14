@@ -17,5 +17,7 @@ COPY . .
 
 RUN npm run build
 
+COPY public/icons dist/icons
+
 EXPOSE 80
 CMD [ "npx", "ts-node", "index.ts" ]
