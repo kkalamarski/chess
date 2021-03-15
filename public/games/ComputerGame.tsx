@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import Pieces from '../../common/pieces'
 
 import parsePGN from '../../engine/parsePGN'
 import findBestMove from '../../engine/webWorker'
 import {
-  changeSidesAction,
-  timeTickAction
+  registerMoveAction,
+  timeTickAction,
+  updateFENAction
 } from '../actions/computerGameActions'
-import ChessBoard from '../src/components/ChessBoard'
+import GameView from '../src/components/GameView'
 import GameWrapper from '../src/components/GameWrapper'
 import LoadingScreen from '../src/components/LoadingScreen'
 import {
@@ -15,6 +16,12 @@ import {
   usePlayerMove,
   useTurn
 } from '../src/providers/ComputerGameProvider'
+
+// @ts-ignore
+import moveAudio from 'url:../assets/sounds/move.wav'
+// @ts-ignore
+import checkAudio from 'url:../assets/sounds/check.wav'
+
 const jsChess = require('js-chess-engine')
 
 function getRandomArbitrary(min: number, max: number) {
@@ -47,7 +54,28 @@ const ComputerGame = () => {
   const [openings, setOpenings] = useState<string[]>([])
   const [state, dispatch] = useComputerGame()
   const turn = useTurn()
-  const onPlayerMove = usePlayerMove()
+
+  const onPlayerMove = useCallback(
+    (from: string, to: string) => {
+      const FEN = jsChess.move(state.FEN, from, to)
+
+      const status = jsChess.status(FEN)
+
+      if (status.check) {
+        const moveSound = new Audio(checkAudio)
+        moveSound.volume = 0.1
+        moveSound.play()
+      } else {
+        const moveSound = new Audio(moveAudio)
+        moveSound.volume = 0.1
+        moveSound.play()
+      }
+
+      dispatch(updateFENAction(FEN))
+      dispatch(registerMoveAction([from, to]))
+    },
+    [state.FEN]
+  )
 
   useEffect(() => {
     ;(async () => {
@@ -92,7 +120,6 @@ const ComputerGame = () => {
             state.startingFEN,
             state.moves
           )
-          console.log('Playing', from, '->', to, 'from opening book.')
           onPlayerMove(from, to)
         } catch (e) {
           const [from, to] = await findBestMove(state.FEN, state.depth)
@@ -129,7 +156,7 @@ const ComputerGame = () => {
 
   return (
     <GameWrapper>
-      <ChessBoard
+      <GameView
         PGN={state.PGN}
         FEN={state.FEN}
         playerColor={state.playerColor}
@@ -140,4 +167,4 @@ const ComputerGame = () => {
   )
 }
 
-export default ComputerGame
+export default React.memo(ComputerGame)

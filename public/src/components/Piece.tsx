@@ -96,4 +96,4 @@ const Piece: React.FC<{ piece: string }> = ({ piece }) => {
   )
 }
 
-export default Piece
+export default React.memo(Piece)

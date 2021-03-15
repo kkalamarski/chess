@@ -123,4 +123,4 @@ const Tile: React.FC<TileProps> = ({
   )
 }
 
-export default Tile
+export default React.memo(Tile)
