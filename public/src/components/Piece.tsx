@@ -78,6 +78,7 @@ const PieceIcon = styled.img.attrs({ src: pieces })<{
   width: calc(60px * 8);
   height: calc(60px * 8);
   transform: scale(0.15);
+  max-width: unset;
 
   @media (max-width: 1000px) {
     transform: scale(0.09);
@@ -96,4 +97,4 @@ const Piece: React.FC<{ piece: string }> = ({ piece }) => {
   )
 }
 
-export default Piece
+export default React.memo(Piece)

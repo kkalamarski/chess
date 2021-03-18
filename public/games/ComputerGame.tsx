@@ -1,20 +1,25 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import Pieces from '../../common/pieces'
 
 import parsePGN from '../../engine/parsePGN'
 import findBestMove from '../../engine/webWorker'
 import {
-  changeSidesAction,
-  timeTickAction
+  registerMoveAction,
+  gameOverAction,
+  timeTickAction,
+  updateFENAction
 } from '../actions/computerGameActions'
-import ChessBoard from '../src/components/ChessBoard'
+import GameView from '../src/components/GameView'
 import GameWrapper from '../src/components/GameWrapper'
 import LoadingScreen from '../src/components/LoadingScreen'
-import {
-  useComputerGame,
-  usePlayerMove,
-  useTurn
-} from '../src/providers/ComputerGameProvider'
+import { useComputerGame, useTurn } from '../src/providers/ComputerGameProvider'
+
+// @ts-ignore
+import moveAudio from 'url:../assets/sounds/move.wav'
+// @ts-ignore
+import checkAudio from 'url:../assets/sounds/check.wav'
+import { GameResult, GameResultReason } from '../src/components/GameResultModal'
+
 const jsChess = require('js-chess-engine')
 
 function getRandomArbitrary(min: number, max: number) {
@@ -47,7 +52,28 @@ const ComputerGame = () => {
   const [openings, setOpenings] = useState<string[]>([])
   const [state, dispatch] = useComputerGame()
   const turn = useTurn()
-  const onPlayerMove = usePlayerMove()
+
+  const onPlayerMove = useCallback(
+    (from: string, to: string) => {
+      const FEN = jsChess.move(state.FEN, from, to)
+
+      const status = jsChess.status(FEN)
+
+      if (status.check) {
+        const moveSound = new Audio(checkAudio)
+        moveSound.volume = 0.1
+        moveSound.play()
+      } else {
+        const moveSound = new Audio(moveAudio)
+        moveSound.volume = 0.1
+        moveSound.play()
+      }
+
+      dispatch(updateFENAction(FEN))
+      dispatch(registerMoveAction([from, to]))
+    },
+    [state.FEN]
+  )
 
   useEffect(() => {
     ;(async () => {
@@ -81,7 +107,7 @@ const ComputerGame = () => {
   }, [])
 
   useEffect(() => {
-    if (!openings?.length) return
+    if (state.isOver) return
 
     if (turn !== state.playerColor) {
       ;(async () => {
@@ -92,7 +118,6 @@ const ComputerGame = () => {
             state.startingFEN,
             state.moves
           )
-          console.log('Playing', from, '->', to, 'from opening book.')
           onPlayerMove(from, to)
         } catch (e) {
           const [from, to] = await findBestMove(state.FEN, state.depth)
@@ -106,7 +131,7 @@ const ComputerGame = () => {
   useEffect(() => {
     const game = jsChess.status(state.FEN)
 
-    if (game.fullMove <= 1) return
+    if (game.fullMove <= 1 || state.isOver) return
 
     if (!game.isFinished && state.whiteTime > 0 && state.blackTime > 0) {
       const blackTime =
@@ -123,21 +148,87 @@ const ComputerGame = () => {
         clearTimeout(timeoutId)
       }
     }
-  }, [state.FEN, turn, state.whiteTime, state.blackTime, state.playerColor])
+  }, [
+    state.FEN,
+    turn,
+    state.whiteTime,
+    state.blackTime,
+    state.playerColor,
+    state.isOver
+  ])
+
+  useEffect(() => {
+    const game = jsChess.status(state.FEN)
+
+    if (game.isFinished) {
+      if (game.checkMate) {
+        const result =
+          turn === state.playerColor ? GameResult.Defeat : GameResult.Victory
+        dispatch(gameOverAction(result, GameResultReason.Checkmate))
+      } else {
+        dispatch(gameOverAction(GameResult.Draw, GameResultReason.Stalemate))
+      }
+    }
+
+    if (state.blackTime <= 0) {
+      dispatch(
+        gameOverAction(
+          state.playerColor === Pieces.BLACK
+            ? GameResult.Defeat
+            : GameResult.Victory,
+          GameResultReason.TimeOut
+        )
+      )
+    }
+
+    if (state.whiteTime <= 0) {
+      dispatch(
+        gameOverAction(
+          state.playerColor === Pieces.WHITE
+            ? GameResult.Defeat
+            : GameResult.Victory,
+          GameResultReason.TimeOut
+        )
+      )
+    }
+
+    const isRepetition =
+      Array.from(
+        new Set(
+          state.moves
+            .slice(state.moves.length - 7, state.moves.length)
+            .map((x) => x.join(','))
+        )
+      ).length === 4
+
+    if (isRepetition) {
+      dispatch(gameOverAction(GameResult.Draw, GameResultReason.Repetition))
+    }
+  }, [
+    state.FEN,
+    state.whiteTime,
+    state.blackTime,
+    state.playerColor,
+    turn,
+    state.moves
+  ])
 
   if (!openings) return <LoadingScreen />
 
   return (
     <GameWrapper>
-      <ChessBoard
+      <GameView
         PGN={state.PGN}
         FEN={state.FEN}
         playerColor={state.playerColor}
         onMove={onPlayerMove}
         moves={state.moves}
+        isOver={state.isOver}
+        result={state.result}
+        reason={state.reason}
       />
     </GameWrapper>
   )
 }
 
-export default ComputerGame
+export default React.memo(ComputerGame)

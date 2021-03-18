@@ -1,34 +1,34 @@
-import React from "react";
-import styled from "styled-components";
-import Pieces from "../../../common/pieces";
-import { useComputerGame } from "../providers/ComputerGameProvider";
+import React from 'react'
+import styled from 'styled-components'
+import Pieces from '../../../common/pieces'
+import { useComputerGame } from '../providers/ComputerGameProvider'
 
-const jsChess = require("js-chess-engine");
+const jsChess = require('js-chess-engine')
 
 const TimerStyle = styled.div<{ active: boolean; low: boolean }>`
-  color: ${(p) => (!p.active ? "#dddddd" : p.low ? "red" : "green")};
+  color: ${(p) => (!p.active ? '#dddddd' : p.low ? 'red' : 'green')};
   display: block;
   text-align: center;
-`;
+`
 
 const StyledTimer: React.FC<{
-  active: boolean;
-  player?: boolean;
-  low: boolean;
-  time: number;
+  active: boolean
+  player?: boolean
+  low: boolean
+  time: number
 }> = ({ active, low, time, player }) => {
-  const minutes = Math.floor(time / 60);
-  const seconds = time % 60;
+  const minutes = Math.floor(time / 60)
+  const seconds = time % 60
 
   return (
     <TimerStyle active={active} low={low}>
-      <div className="label">{player ? "Player" : "Computer"}</div>
-      {(minutes > 9 ? minutes : "0" + minutes) +
-        ":" +
-        (seconds > 9 ? seconds : "0" + seconds)}
+      <div className="label">{player ? 'Player' : 'Computer'}</div>
+      {(minutes > 9 ? minutes : '0' + minutes) +
+        ':' +
+        (seconds > 9 ? seconds : '0' + seconds)}
     </TimerStyle>
-  );
-};
+  )
+}
 
 const TimerBox = styled.section`
   grid-area: timer;
@@ -58,37 +58,33 @@ const TimerBox = styled.section`
       display: none;
     } */
   }
-`;
+`
 
 const Timer = () => {
-  const [state, dispatch] = useComputerGame();
-  const game = jsChess.status(state.FEN);
+  const [state, dispatch] = useComputerGame()
+  const game = jsChess.status(state.FEN)
 
   const computerTime =
-    state.playerColor === Pieces.WHITE ? state.blackTime : state.whiteTime;
+    state.playerColor === Pieces.WHITE ? state.blackTime : state.whiteTime
   const playerTime =
-    state.playerColor === Pieces.BLACK ? state.blackTime : state.whiteTime;
+    state.playerColor === Pieces.BLACK ? state.blackTime : state.whiteTime
 
   return (
     <TimerBox>
-      {!!computerTime && (
-        <StyledTimer
-          active={game.turn !== state.playerColor}
-          low={computerTime < 60}
-          time={computerTime}
-        />
-      )}
-      <hr style={{ width: "100%" }} />
-      {!!playerTime && (
-        <StyledTimer
-          player
-          active={game.turn === state.playerColor}
-          low={playerTime < 60}
-          time={playerTime}
-        />
-      )}
+      <StyledTimer
+        active={game.turn !== state.playerColor}
+        low={computerTime < 60}
+        time={computerTime}
+      />
+      <hr style={{ width: '100%' }} />
+      <StyledTimer
+        player
+        active={game.turn === state.playerColor}
+        low={playerTime < 60}
+        time={playerTime}
+      />
     </TimerBox>
-  );
-};
+  )
+}
 
-export default Timer;
+export default React.memo(Timer)
