@@ -1,5 +1,12 @@
 import React from 'react'
 import { render } from 'react-dom'
+import {
+  ChakraProvider,
+  ColorModeScript,
+  CSSReset,
+  extendTheme
+} from '@chakra-ui/react'
+
 import { createGlobalStyle } from 'styled-components'
 import ComputerGame from './games/ComputerGame'
 
@@ -8,6 +15,7 @@ import ComputerGameProvider from './src/providers/ComputerGameProvider'
 import 'antd/dist/antd.css'
 import 'antd/dist/antd.dark.css'
 import 'antd/dist/antd.compact.css'
+import theme from './theme'
 
 const GlobalStyles = createGlobalStyle`
   :root {
@@ -22,22 +30,23 @@ const GlobalStyles = createGlobalStyle`
     --dark-salmon: #e29578ff;
   }
 
-    html, body {
-    margin: 0;
-    padding: 0;
-
-    font-family: 'Montserrat', sans-serif;
-  }
+    
 `
 
 const Chess = () => (
-  <ComputerGameProvider>
-    {/* <SocketProvider> */}
-    <GlobalStyles />
-    {/* <Game /> */}
-    <ComputerGame />
-    {/* </SocketProvider> */}
-  </ComputerGameProvider>
+  <>
+    <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+    <ChakraProvider theme={theme}>
+      <CSSReset />
+      <ComputerGameProvider>
+        {/* <SocketProvider> */}
+        <GlobalStyles />
+        {/* <Game /> */}
+        <ComputerGame />
+        {/* </SocketProvider> */}
+      </ComputerGameProvider>
+    </ChakraProvider>
+  </>
 )
 
 render(<Chess />, document.querySelector('#Root'))

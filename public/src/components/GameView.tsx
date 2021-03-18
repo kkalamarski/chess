@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import Pieces from '../../../common/pieces'
-import { Modal } from 'antd'
 import MovesBox from './MovesBox'
 import Timer from './Timer'
 import EngineLevelPicker from './EngineLevelPicker'
 import GameButtons from './GameButtons'
 import LoadingScreen from './LoadingScreen'
 import ChessBoard from './ChessBoard'
+import { GameResult, GameResultReason } from './GameResultModal'
 
 const jsChess = require('js-chess-engine')
 
@@ -17,6 +17,9 @@ interface ChessBoardProps {
   playerColor: Pieces
   moves: [string, string][]
   onMove: (from: string, to: string) => void
+  isOver: boolean
+  result: GameResult
+  reason: GameResultReason
 }
 
 const ChessBoardWrapper = styled.div`
@@ -55,9 +58,11 @@ const GameView: React.FC<ChessBoardProps> = ({
   PGN,
   playerColor,
   onMove,
-  moves
+  moves,
+  isOver,
+  result,
+  reason
 }) => {
-  const [endModal, setEndModal] = useState(true)
   const [game, setGame] = useState<any>()
 
   const chessBoardRef = useRef<HTMLDivElement>(null)
@@ -81,24 +86,14 @@ const GameView: React.FC<ChessBoardProps> = ({
         onMove={onMove}
         check={game.check}
         turn={game.turn}
+        isFinished={isOver}
+        result={result}
+        reason={reason}
       />
       <MovesBox PGN={PGN} />
       <Timer />
       <EngineLevelPicker />
       <GameButtons />
-      {chessBoardRef.current && (
-        <Modal
-          visible={game.isFinished && endModal}
-          footer={false}
-          centered={true}
-          title={false}
-          getContainer={chessBoardRef.current}
-          width={200}
-          onCancel={() => setEndModal(false)}
-        >
-          {game.checkMate ? 'Checkmate!' : 'Stalemate!'}
-        </Modal>
-      )}
     </ChessBoardWrapper>
   )
 }

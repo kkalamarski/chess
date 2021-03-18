@@ -5,22 +5,20 @@ import parsePGN from '../../engine/parsePGN'
 import findBestMove from '../../engine/webWorker'
 import {
   registerMoveAction,
+  gameOverAction,
   timeTickAction,
   updateFENAction
 } from '../actions/computerGameActions'
 import GameView from '../src/components/GameView'
 import GameWrapper from '../src/components/GameWrapper'
 import LoadingScreen from '../src/components/LoadingScreen'
-import {
-  useComputerGame,
-  usePlayerMove,
-  useTurn
-} from '../src/providers/ComputerGameProvider'
+import { useComputerGame, useTurn } from '../src/providers/ComputerGameProvider'
 
 // @ts-ignore
 import moveAudio from 'url:../assets/sounds/move.wav'
 // @ts-ignore
 import checkAudio from 'url:../assets/sounds/check.wav'
+import { GameResult, GameResultReason } from '../src/components/GameResultModal'
 
 const jsChess = require('js-chess-engine')
 
@@ -109,7 +107,7 @@ const ComputerGame = () => {
   }, [])
 
   useEffect(() => {
-    if (!openings?.length) return
+    if (state.isOver) return
 
     if (turn !== state.playerColor) {
       ;(async () => {
@@ -133,7 +131,7 @@ const ComputerGame = () => {
   useEffect(() => {
     const game = jsChess.status(state.FEN)
 
-    if (game.fullMove <= 1) return
+    if (game.fullMove <= 1 || state.isOver) return
 
     if (!game.isFinished && state.whiteTime > 0 && state.blackTime > 0) {
       const blackTime =
@@ -150,7 +148,70 @@ const ComputerGame = () => {
         clearTimeout(timeoutId)
       }
     }
-  }, [state.FEN, turn, state.whiteTime, state.blackTime, state.playerColor])
+  }, [
+    state.FEN,
+    turn,
+    state.whiteTime,
+    state.blackTime,
+    state.playerColor,
+    state.isOver
+  ])
+
+  useEffect(() => {
+    const game = jsChess.status(state.FEN)
+
+    if (game.isFinished) {
+      if (game.checkMate) {
+        const result =
+          turn === state.playerColor ? GameResult.Defeat : GameResult.Victory
+        dispatch(gameOverAction(result, GameResultReason.Checkmate))
+      } else {
+        dispatch(gameOverAction(GameResult.Draw, GameResultReason.Stalemate))
+      }
+    }
+
+    if (state.blackTime <= 0) {
+      dispatch(
+        gameOverAction(
+          state.playerColor === Pieces.BLACK
+            ? GameResult.Defeat
+            : GameResult.Victory,
+          GameResultReason.TimeOut
+        )
+      )
+    }
+
+    if (state.whiteTime <= 0) {
+      dispatch(
+        gameOverAction(
+          state.playerColor === Pieces.WHITE
+            ? GameResult.Defeat
+            : GameResult.Victory,
+          GameResultReason.TimeOut
+        )
+      )
+    }
+
+    const isRepetition =
+      Array.from(
+        new Set(
+          state.moves
+            .slice(state.moves.length - 7, state.moves.length)
+            .map((x) => x.join(','))
+        )
+      ).length === 4
+
+    if (isRepetition) {
+      dispatch(gameOverAction(GameResult.Draw, GameResultReason.Repetition))
+    }
+  }, [
+    state.FEN,
+    state.whiteTime,
+    state.blackTime,
+    state.playerColor,
+    turn,
+    state.moves
+  ])
 
   if (!openings) return <LoadingScreen />
 
@@ -162,6 +223,9 @@ const ComputerGame = () => {
         playerColor={state.playerColor}
         onMove={onPlayerMove}
         moves={state.moves}
+        isOver={state.isOver}
+        result={state.result}
+        reason={state.reason}
       />
     </GameWrapper>
   )

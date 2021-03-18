@@ -1,6 +1,7 @@
 import Pieces from '../../../common/pieces'
 import { convertGameToPGN } from '../../../engine/convertMoveToPGN'
 import ComputerGameActionTypes from '../../actions/computerGameActions'
+import { GameResult, GameResultReason } from '../components/GameResultModal'
 
 export interface ComputerGameState {
   turn: Pieces
@@ -12,18 +13,26 @@ export interface ComputerGameState {
   blackTime: number
   depth: number
   moves: [string, string][]
+  isOver: boolean
+  isResultOpen: boolean
+  result: GameResult
+  reason: GameResultReason
 }
 
 export const defaultState: ComputerGameState = {
   depth: 2,
-  whiteTime: 10 * 60,
-  blackTime: 10 * 60,
+  whiteTime: 3 * 60,
+  blackTime: 3 * 60,
   turn: Pieces.WHITE,
   playerColor: Math.random() > 0.5 ? Pieces.WHITE : Pieces.BLACK,
   PGN: '',
   FEN: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', // starting position
   startingFEN: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', // starting position
-  moves: []
+  moves: [],
+  isOver: false,
+  isResultOpen: false,
+  result: GameResult.Progress,
+  reason: GameResultReason.Progress
 }
 
 interface Action {
@@ -60,6 +69,21 @@ const computerGameReducer = (state: ComputerGameState, action: Action) => {
         ...state,
         whiteTime: action.data.whiteTime,
         blackTime: action.data.blackTime
+      }
+
+    case ComputerGameActionTypes.GAME_OVER:
+      return {
+        ...state,
+        isOver: true,
+        isResultOpen: true,
+        reason: action.data.reason,
+        result: action.data.result
+      }
+
+    case ComputerGameActionTypes.HIDE_GAME_RESULT:
+      return {
+        ...state,
+        isResultOpen: false
       }
 
     default:

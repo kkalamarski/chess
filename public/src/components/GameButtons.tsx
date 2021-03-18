@@ -1,41 +1,42 @@
-import { Button, Space } from "antd";
-import React from "react";
-import styled from "styled-components";
-import { RetweetOutlined, SyncOutlined, StopOutlined } from "@ant-design/icons";
-import { useComputerGame } from "../providers/ComputerGameProvider";
+import Button from '../design/Button'
+import React from 'react'
+import styled from 'styled-components'
+import { useComputerGame } from '../providers/ComputerGameProvider'
 import {
   changeSidesAction,
-  restartAction,
-} from "../../actions/computerGameActions";
+  restartAction
+} from '../../actions/computerGameActions'
+import { Stack } from '@chakra-ui/layout'
+import { NotAllowedIcon, RepeatClockIcon, RepeatIcon } from '@chakra-ui/icons'
 
 const ButtonsWrapper = styled.section`
   grid-area: buttons;
   padding: 15px 0;
   text-align: center;
-`;
+`
 
 const GameButtons = () => {
-  const [state, dispatch] = useComputerGame();
+  const [state, dispatch] = useComputerGame()
 
   return (
     <ButtonsWrapper>
-      <Space>
+      <Stack isInline>
         <Button
           onClick={() => dispatch(changeSidesAction())}
-          icon={<RetweetOutlined />}
+          leftIcon={<RepeatIcon />}
         >
           Change sides
         </Button>
-        <Button icon={<StopOutlined />}>Abort</Button>
+        <Button leftIcon={<NotAllowedIcon />}>Abort</Button>
         <Button
           onClick={() => dispatch(restartAction())}
-          icon={<SyncOutlined />}
+          leftIcon={<RepeatClockIcon />}
         >
           Restart
         </Button>
-      </Space>
+      </Stack>
     </ButtonsWrapper>
-  );
-};
+  )
+}
 
-export default GameButtons;
+export default GameButtons

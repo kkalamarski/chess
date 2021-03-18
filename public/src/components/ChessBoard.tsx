@@ -1,22 +1,14 @@
+import { Box } from '@chakra-ui/layout'
 import React, { useCallback, useMemo, useState } from 'react'
-import styled from 'styled-components'
 import Pieces from '../../../common/pieces'
 import useViewport from '../hooks/useViewport'
+import GameResultModal, {
+  GameResult,
+  GameResultReason
+} from './GameResultModal'
 import Tile from './Tile'
 
 const jsChess = require('js-chess-engine')
-
-const StyledChessBoard = styled.div<{ width: number }>`
-  width: ${(p) => p.width - 30}px;
-  max-width: 640px;
-  height: ${(p) => p.width - 30}px;
-  max-height: 640px;
-  display: grid;
-  grid-template-columns: repeat(8, 1fr);
-  grid-area: board;
-  border-radius: 0.3em;
-  overflow: hidden;
-`
 
 interface ChessBoardProps {
   FEN: string
@@ -24,8 +16,11 @@ interface ChessBoardProps {
   playerColor: Pieces
   turn: Pieces
   check: boolean
+  isFinished: boolean
   lastMove: [string, string]
   onMove: (from: string, to: string) => void
+  result: GameResult
+  reason: GameResultReason
 }
 
 const ChessBoard: React.FC<ChessBoardProps> = ({
@@ -35,7 +30,10 @@ const ChessBoard: React.FC<ChessBoardProps> = ({
   lastMove,
   check,
   turn,
-  onMove
+  isFinished,
+  onMove,
+  reason,
+  result
 }) => {
   const { width } = useViewport()
   const [selected, setSelected] = useState<string>('')
@@ -112,7 +110,28 @@ const ChessBoard: React.FC<ChessBoardProps> = ({
     tiles = tiles.reverse()
   }
 
-  return <StyledChessBoard width={width}>{tiles}</StyledChessBoard>
+  return (
+    <Box
+      pos="relative"
+      w={width - 30}
+      h={width - 30}
+      maxH="640"
+      maxW="640"
+      gridArea="board"
+      rounded="lg"
+      overflow="hidden"
+    >
+      <Box
+        display="grid"
+        gridTemplateColumns="repeat(8, 1fr)"
+        w="100%"
+        h="100%"
+      >
+        {tiles}
+      </Box>
+      <GameResultModal />
+    </Box>
+  )
 }
 
 export default React.memo(ChessBoard)

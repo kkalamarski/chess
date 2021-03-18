@@ -71,22 +71,18 @@ const Timer = () => {
 
   return (
     <TimerBox>
-      {!!computerTime && (
-        <StyledTimer
-          active={game.turn !== state.playerColor}
-          low={computerTime < 60}
-          time={computerTime}
-        />
-      )}
+      <StyledTimer
+        active={game.turn !== state.playerColor}
+        low={computerTime < 60}
+        time={computerTime}
+      />
       <hr style={{ width: '100%' }} />
-      {!!playerTime && (
-        <StyledTimer
-          player
-          active={game.turn === state.playerColor}
-          low={playerTime < 60}
-          time={playerTime}
-        />
-      )}
+      <StyledTimer
+        player
+        active={game.turn === state.playerColor}
+        low={playerTime < 60}
+        time={playerTime}
+      />
     </TimerBox>
   )
 }
