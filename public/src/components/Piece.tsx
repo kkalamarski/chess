@@ -87,12 +87,25 @@ const PieceIcon = styled.img.attrs({ src: pieces })<{
   ${calculateSpritePosition};
 `
 
-const Piece: React.FC<{ piece: string }> = ({ piece }) => {
+const Piece: React.FC<{
+  piece: string
+  draggable: boolean
+  onDragStart: Function
+  onDragEnd: Function
+}> = ({ piece, draggable, onDragStart, onDragEnd }) => {
   const color = hasLowerCase(piece) ? Pieces.BLACK : Pieces.WHITE
 
   return (
     <PieceWrapper color={color}>
-      {piece && <PieceIcon piece={piece.toUpperCase()} color={color} />}
+      {piece && (
+        <PieceIcon
+          piece={piece.toUpperCase()}
+          color={color}
+          draggable={draggable}
+          onDragStart={() => onDragStart()}
+          onDragEnd={() => onDragEnd()}
+        />
+      )}
     </PieceWrapper>
   )
 }

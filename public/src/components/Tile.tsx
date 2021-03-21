@@ -11,6 +11,8 @@ interface TileProps {
   lastMove: boolean
   possibleMove: boolean
   onTileClick: React.MouseEventHandler<HTMLDivElement>
+  onPieceSelect: React.MouseEventHandler<HTMLDivElement>
+  onPieceDeselect: React.MouseEventHandler<HTMLDivElement>
 }
 
 const TileName = styled.div<{ show: boolean }>`
@@ -105,7 +107,9 @@ const Tile: React.FC<TileProps> = ({
   check,
   possibleMove,
   lastMove,
-  onTileClick
+  onTileClick,
+  onPieceSelect,
+  onPieceDeselect
 }) => {
   const [file, row] = tile.split('')
 
@@ -114,10 +118,22 @@ const Tile: React.FC<TileProps> = ({
       color={selected ? 'var(--available-move)' : check ? 'red' : color}
       onClick={onTileClick}
       role="button"
+      onDrop={(e) => {
+        e.preventDefault()
+        onTileClick(e)
+      }}
+      onDragOver={(e) => {
+        e.preventDefault()
+      }}
     >
       {possibleMove && <PossibleMoveOverlay isPiece={!!piece} />}
       {lastMove && <LastMoveOverlay />}
-      <Piece piece={piece} />
+      <Piece
+        piece={piece}
+        draggable={true}
+        onDragStart={onPieceSelect}
+        onDragEnd={onPieceDeselect}
+      />
       <TileName show={file === 'a' || row === '1'}>{tile}</TileName>
     </TileWrapper>
   )
