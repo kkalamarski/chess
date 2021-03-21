@@ -30,10 +30,7 @@ const ChessBoard: React.FC<ChessBoardProps> = ({
   lastMove,
   check,
   turn,
-  isFinished,
-  onMove,
-  reason,
-  result
+  onMove
 }) => {
   const { width } = useViewport()
   const [selected, setSelected] = useState<string>('')
@@ -102,7 +99,7 @@ const ChessBoard: React.FC<ChessBoardProps> = ({
             />
           )
         }),
-    [pieces, selected, check, turn, onTileClick, possibleMoves, lastMove]
+    [pieces, selected, check, turn, onTileClick, possibleMoves, lastMove, width]
   )
 
   // Flip the board for black pieces

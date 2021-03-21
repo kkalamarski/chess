@@ -1,20 +1,12 @@
 import React from 'react'
 import { render } from 'react-dom'
-import {
-  ChakraProvider,
-  ColorModeScript,
-  CSSReset,
-  extendTheme
-} from '@chakra-ui/react'
+import { ChakraProvider, ColorModeScript, CSSReset } from '@chakra-ui/react'
 
 import { createGlobalStyle } from 'styled-components'
 import ComputerGame from './games/ComputerGame'
 
 import ComputerGameProvider from './src/providers/ComputerGameProvider'
 
-import 'antd/dist/antd.css'
-import 'antd/dist/antd.dark.css'
-import 'antd/dist/antd.compact.css'
 import theme from './theme'
 
 const GlobalStyles = createGlobalStyle`

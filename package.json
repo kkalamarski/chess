@@ -21,7 +21,6 @@
     "@emotion/react": "^11.1.5",
     "@emotion/styled": "^11.1.5",
     "@types/service_worker_api": "0.0.9",
-    "antd": "^4.12.3",
     "css-box-model": "^1.2.1",
     "express": "^4.17.1",
     "framer-motion": "^3.10.3",
@@ -31,7 +30,6 @@
     "react-socket-io-hooks": "^1.1.0",
     "socket.io": "^3.1.1",
     "socket.io-client": "^3.1.1",
-    "stockfish": "^11.0.0",
     "styled-components": "^5.2.1"
   },
   "devDependencies": {

@@ -1,17 +1,10 @@
 import React from 'react'
-import { DownOutlined } from '@ant-design/icons'
-import styled from 'styled-components'
 import { useComputerGame } from '../providers/ComputerGameProvider'
 import { setEngineDepth } from '../../actions/computerGameActions'
 import { Menu, MenuButton, MenuList } from '@chakra-ui/menu'
 import { Box, MenuItem, Stack } from '@chakra-ui/react'
 import ButtonWrapper from '../design/Button'
-
-const PickerWrapper = styled.section`
-  font-size: 1rem;
-  padding: 15px 0;
-  grid-area: level;
-`
+import { ChevronDownIcon } from '@chakra-ui/icons'
 
 const EngineLevelPicker = () => {
   const [state, dispatch] = useComputerGame()
@@ -22,7 +15,7 @@ const EngineLevelPicker = () => {
       <Box pos="relative" w="100%">
         <Menu placement="bottom">
           <MenuButton as={ButtonWrapper} w="100%">
-            AI Level {state.depth} <DownOutlined />
+            AI Level {state.depth} <ChevronDownIcon />
           </MenuButton>
           <MenuList>
             <MenuItem onClick={() => dispatch(setEngineDepth(1))}>

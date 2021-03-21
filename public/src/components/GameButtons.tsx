@@ -16,7 +16,7 @@ const ButtonsWrapper = styled.section`
 `
 
 const GameButtons = () => {
-  const [state, dispatch] = useComputerGame()
+  const [_, dispatch] = useComputerGame()
 
   return (
     <ButtonsWrapper>
