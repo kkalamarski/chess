@@ -94,6 +94,8 @@ const ChessBoard: React.FC<ChessBoardProps> = ({
               check={isInCheck}
               piece={piece}
               onTileClick={onTileClick(tile, piece)}
+              onPieceSelect={() => setSelected(tile)}
+              onPieceDeselect={() => setSelected('')}
               possibleMove={possibleMoves.includes(tile.toUpperCase())}
               lastMove={lastMove && lastMove.includes(tile.toUpperCase())}
             />
