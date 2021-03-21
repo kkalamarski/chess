@@ -1,6 +1,6 @@
-import React from "react";
-import styled from "styled-components";
-import { useGame } from "../providers/SocketProvider";
+import React from 'react'
+import styled from 'styled-components'
+import { useGame } from '../providers/SocketProvider'
 
 const MovesWrapper = styled.aside`
   display: flex;
@@ -10,18 +10,18 @@ const MovesWrapper = styled.aside`
 
   font-size: 3rem;
   color: white;
-`;
+`
 
 const Moves = () => {
-  const game = useGame();
+  const game = useGame()
 
   return (
     <MovesWrapper>
-      {game?.board?.check && !game?.board?.checkMate && "Check!"}
-      {game?.board?.moves.length === 0 && !game?.board?.check && "Stalemate!"}
-      {game?.board?.checkMate && "Checkmate!"}
+      {game?.board?.check && !game?.board?.checkMate && 'Check!'}
+      {game?.board?.moves.length === 0 && !game?.board?.check && 'Stalemate!'}
+      {game?.board?.checkMate && 'Checkmate!'}
     </MovesWrapper>
-  );
-};
+  )
+}
 
-export default Moves;
+export default React.memo(Moves)

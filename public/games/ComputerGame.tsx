@@ -107,6 +107,7 @@ const ComputerGame = () => {
   }, [])
 
   useEffect(() => {
+    if (!openings?.length) return
     if (state.isOver) return
 
     if (turn !== state.playerColor) {
