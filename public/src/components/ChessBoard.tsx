@@ -1,5 +1,6 @@
 import { Box } from '@chakra-ui/layout'
 import React, { useCallback, useMemo, useState } from 'react'
+import styled from 'styled-components'
 import Pieces from '../../../common/pieces'
 import useViewport from '../hooks/useViewport'
 import GameResultModal, {
@@ -22,6 +23,21 @@ interface ChessBoardProps {
   result: GameResult
   reason: GameResultReason
 }
+
+const ChessBoardWrapper = styled(Box)`
+  * {
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+
+    /*
+     Introduced in IE 10.
+     See http://ie.microsoft.com/testdrive/HTML5/msUserSelect/
+   */
+    -ms-user-select: none;
+    user-select: none;
+  }
+`
 
 const ChessBoard: React.FC<ChessBoardProps> = ({
   FEN,
@@ -110,7 +126,7 @@ const ChessBoard: React.FC<ChessBoardProps> = ({
   }
 
   return (
-    <Box
+    <ChessBoardWrapper
       pos="relative"
       w={width - 30}
       h={width - 30}
@@ -129,7 +145,7 @@ const ChessBoard: React.FC<ChessBoardProps> = ({
         {tiles}
       </Box>
       <GameResultModal />
-    </Box>
+    </ChessBoardWrapper>
   )
 }
 
