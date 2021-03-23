@@ -7,7 +7,10 @@ import {
   registerMoveAction,
   gameOverAction,
   timeTickAction,
-  updateFENAction
+  updateFENAction,
+  setInitialSettingsAction,
+  incrementAction,
+  restartAction
 } from '../actions/computerGameActions'
 import GameView from '../src/components/GameView'
 import GameWrapper from '../src/components/GameWrapper'
@@ -19,6 +22,7 @@ import moveAudio from 'url:../assets/sounds/move.wav'
 // @ts-ignore
 import checkAudio from 'url:../assets/sounds/check.wav'
 import { GameResult, GameResultReason } from '../src/components/GameResultModal'
+import { RouteProps, useHistory } from 'react-router-dom'
 
 const jsChess = require('js-chess-engine')
 
@@ -48,10 +52,23 @@ const playMoveFromOpeningBook = (
   throw 'no book move'
 }
 
-const ComputerGame = () => {
+const ComputerGame: React.FC<RouteProps> = ({ location }) => {
+  const history = useHistory()
   const [openings, setOpenings] = useState<string[]>([])
   const [state, dispatch] = useComputerGame()
   const turn = useTurn()
+
+  useEffect(() => {
+    if (location?.state) {
+      dispatch(setInitialSettingsAction(location.state as any))
+    } else {
+      history.replace('/')
+    }
+
+    return () => {
+      dispatch(restartAction())
+    }
+  }, [])
 
   const onPlayerMove = useCallback(
     (from: string, to: string) => {
@@ -69,6 +86,11 @@ const ComputerGame = () => {
         moveSound.play()
       }
 
+      dispatch(
+        incrementAction(
+          status.turn === Pieces.WHITE ? Pieces.BLACK : Pieces.WHITE
+        )
+      )
       dispatch(updateFENAction(FEN))
       dispatch(registerMoveAction([from, to]))
     },

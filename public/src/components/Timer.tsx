@@ -5,8 +5,8 @@ import { useComputerGame } from '../providers/ComputerGameProvider'
 
 const jsChess = require('js-chess-engine')
 
-const TimerStyle = styled.div<{ active: boolean; low: boolean }>`
-  color: ${(p) => (!p.active ? '#dddddd' : p.low ? 'red' : 'green')};
+const TimerStyle = styled.div<{ active: boolean; lowTime: boolean }>`
+  color: ${(p) => (!p.active ? '#dddddd' : p.lowTime ? 'red' : 'green')};
   display: block;
   text-align: center;
 `
@@ -14,14 +14,14 @@ const TimerStyle = styled.div<{ active: boolean; low: boolean }>`
 const StyledTimer: React.FC<{
   active: boolean
   player?: boolean
-  low: boolean
+  lowTime: boolean
   time: number
-}> = ({ active, low, time, player }) => {
+}> = ({ active, lowTime, time, player }) => {
   const minutes = Math.floor(time / 60)
   const seconds = time % 60
 
   return (
-    <TimerStyle active={active} low={low}>
+    <TimerStyle active={active} lowTime={lowTime}>
       <div className="label">{player ? 'Player' : 'Computer'}</div>
       {(minutes > 9 ? minutes : '0' + minutes) +
         ':' +
@@ -61,7 +61,7 @@ const TimerBox = styled.section`
 `
 
 const Timer = () => {
-  const [state, dispatch] = useComputerGame()
+  const [state] = useComputerGame()
   const game = jsChess.status(state.FEN)
 
   const computerTime =
@@ -73,14 +73,14 @@ const Timer = () => {
     <TimerBox>
       <StyledTimer
         active={game.turn !== state.playerColor}
-        low={computerTime < 60}
+        lowTime={computerTime < 60}
         time={computerTime}
       />
       <hr style={{ width: '100%' }} />
       <StyledTimer
         player
         active={game.turn === state.playerColor}
-        low={playerTime < 60}
+        lowTime={playerTime < 60}
         time={playerTime}
       />
     </TimerBox>
