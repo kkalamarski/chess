@@ -1,13 +1,19 @@
 import React from 'react'
 import { render } from 'react-dom'
-import { ChakraProvider, ColorModeScript, CSSReset } from '@chakra-ui/react'
-
+import {
+  Box,
+  ChakraProvider,
+  ColorModeScript,
+  CSSReset
+} from '@chakra-ui/react'
+import { BrowserRouter as Router, Link, Route } from 'react-router-dom'
 import { createGlobalStyle } from 'styled-components'
 import ComputerGame from './games/ComputerGame'
 
 import ComputerGameProvider from './src/providers/ComputerGameProvider'
 
 import theme from './theme'
+import LandingPage from './pages/LandingPage'
 
 const GlobalStyles = createGlobalStyle`
   :root {
@@ -22,7 +28,14 @@ const GlobalStyles = createGlobalStyle`
     --dark-salmon: #e29578ff;
   }
 
-    
+  html, body {
+    height: 100vh;
+    width: 100vw;
+  } 
+
+  #Root {
+    height: 100%;
+  }
 `
 
 const Chess = () => (
@@ -31,11 +44,14 @@ const Chess = () => (
     <ChakraProvider theme={theme}>
       <CSSReset />
       <ComputerGameProvider>
-        {/* <SocketProvider> */}
         <GlobalStyles />
-        {/* <Game /> */}
-        <ComputerGame />
-        {/* </SocketProvider> */}
+        <Router>
+          <Box pos="fixed" top={0} left={0} right={0} h={100} p={5} zIndex={99}>
+            <Link to="/">Chess </Link>
+          </Box>
+          <Route path="/" exact component={LandingPage} />
+          <Route path="/chess" component={ComputerGame} />
+        </Router>
       </ComputerGameProvider>
     </ChakraProvider>
   </>

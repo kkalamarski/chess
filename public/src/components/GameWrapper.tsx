@@ -1,8 +1,7 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
 const GameWrapper = styled.section`
   position: relative;
-  background: #1c1c1c;
   width: 100vw;
   height: 100vh;
   padding: 15px;
@@ -12,6 +11,6 @@ const GameWrapper = styled.section`
     align-items: center;
     justify-content: space-around;
   }
-`;
+`
 
-export default GameWrapper;
+export default GameWrapper

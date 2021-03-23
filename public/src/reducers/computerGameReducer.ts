@@ -9,8 +9,10 @@ export interface ComputerGameState {
   FEN: string
   startingFEN: string
   PGN: string
+  initialTime: number
   whiteTime: number
   blackTime: number
+  increment: number
   depth: number
   moves: [string, string][]
   isOver: boolean
@@ -21,8 +23,10 @@ export interface ComputerGameState {
 
 export const defaultState: ComputerGameState = {
   depth: 2,
+  initialTime: 3 * 60,
   whiteTime: 3 * 60,
   blackTime: 3 * 60,
+  increment: 0,
   turn: Pieces.WHITE,
   playerColor: Math.random() > 0.5 ? Pieces.WHITE : Pieces.BLACK,
   PGN: '',
@@ -42,6 +46,27 @@ interface Action {
 
 const computerGameReducer = (state: ComputerGameState, action: Action) => {
   switch (action.type) {
+    case ComputerGameActionTypes.SET_INITIAL_SETTINGS:
+      const playerColor =
+        action.data.side === 'random'
+          ? Math.random() > 0.5
+            ? Pieces.WHITE
+            : Pieces.BLACK
+          : action.data.side === 'white'
+          ? Pieces.WHITE
+          : Pieces.BLACK
+
+      const [time, increment] = action.data.timeControl.split('x').map(Number)
+
+      return {
+        ...state,
+        depth: Number(action.data.ai),
+        playerColor,
+        blackTime: time * 60,
+        whiteTime: time * 60,
+        initialTime: time * 60,
+        increment
+      }
     case ComputerGameActionTypes.SET_ENGINE_DEPTH:
       return { ...state, depth: action.data }
 
@@ -49,7 +74,15 @@ const computerGameReducer = (state: ComputerGameState, action: Action) => {
       return { ...state, FEN: action.data }
 
     case ComputerGameActionTypes.RESTART:
-      return defaultState
+      return {
+        ...defaultState,
+        initialTime: state.initialTime,
+        blackTime: state.initialTime,
+        whiteTime: state.initialTime,
+        increment: state.increment,
+        playerColor:
+          state.playerColor === Pieces.WHITE ? Pieces.BLACK : Pieces.WHITE
+      }
 
     case ComputerGameActionTypes.CHANGE_SIDES:
       return {
@@ -70,6 +103,15 @@ const computerGameReducer = (state: ComputerGameState, action: Action) => {
         whiteTime: action.data.whiteTime,
         blackTime: action.data.blackTime
       }
+
+    case ComputerGameActionTypes.INCREMENT:
+      let whiteTime = state.whiteTime,
+        blackTime = state.blackTime
+
+      if (action.data.color === Pieces.WHITE) whiteTime += state.increment
+      else blackTime += state.increment
+
+      return { ...state, whiteTime, blackTime }
 
     case ComputerGameActionTypes.GAME_OVER:
       return {

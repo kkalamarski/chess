@@ -1,3 +1,4 @@
+import Pieces from '../../common/pieces'
 import { GameResult, GameResultReason } from '../src/components/GameResultModal'
 
 enum ComputerGameActionTypes {
@@ -8,8 +9,24 @@ enum ComputerGameActionTypes {
   CHANGE_SIDES = 'CHANGE_SIDES',
   RESTART = 'RESTART',
   GAME_OVER = 'SHOW_GAME_RESULT',
-  HIDE_GAME_RESULT = 'HIDE_GAME_RESULT'
+  HIDE_GAME_RESULT = 'HIDE_GAME_RESULT',
+  SET_INITIAL_SETTINGS = 'SET_INITIAL_SETTINGS',
+  INCREMENT = 'INCREMENT'
 }
+
+export const setInitialSettingsAction = (data: {
+  ai: string
+  timeControl: string
+  side: string
+}) => ({
+  type: ComputerGameActionTypes.SET_INITIAL_SETTINGS,
+  data
+})
+
+export const incrementAction = (color: Pieces) => ({
+  type: ComputerGameActionTypes.INCREMENT,
+  data: { color }
+})
 
 export const updateFENAction = (FEN: string) => ({
   type: ComputerGameActionTypes.UPDATE_FEN,
