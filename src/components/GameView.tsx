@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
-import Pieces from '../../../common/pieces'
+import Pieces from '../../common/pieces'
 import MovesBox from './MovesBox'
 import Timer from './Timer'
 import EngineLevelPicker from './EngineLevelPicker'
