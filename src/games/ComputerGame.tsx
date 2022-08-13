@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import Pieces from '../../common/pieces'
 
 import parsePGN from '../../engine/parsePGN'
@@ -61,6 +61,17 @@ interface ComputerGameProps {
   side: string
 }
 
+const useSound = (src: string) => {
+  const sound = useMemo(() => {
+    const audio = new Audio(src)
+    audio.volume = 0.2
+
+    return audio
+  }, [src])
+
+  return sound
+}
+
 const ComputerGame: React.FC<ComputerGameProps> = ({
   ai,
   timeControl,
@@ -68,6 +79,8 @@ const ComputerGame: React.FC<ComputerGameProps> = ({
 }) => {
   const [openings, setOpenings] = useState<string[]>([])
   const [state, dispatch] = useComputerGame()
+  const moveSound = useSound('/assets/sounds/move.wav')
+  const checkSound = useSound('/assets/sounds/check.wav')
   const turn = useTurn()
 
   useEffect(() => {
@@ -80,15 +93,11 @@ const ComputerGame: React.FC<ComputerGameProps> = ({
 
       const status = jsChess.status(FEN)
 
-      // if (status.check) {
-      //   const moveSound = new Audio(checkAudio)
-      //   moveSound.volume = 0.1
-      //   moveSound.play()
-      // } else {
-      //   const moveSound = new Audio(moveAudio)
-      //   moveSound.volume = 0.1
-      //   moveSound.play()
-      // }
+      if (status.check) {
+        checkSound.play()
+      } else {
+        moveSound.play()
+      }
 
       dispatch(
         incrementAction(
@@ -133,6 +142,9 @@ const ComputerGame: React.FC<ComputerGameProps> = ({
   }, [])
 
   useEffect(() => {
+    const game = jsChess.status(state.FEN)
+
+    if (game.isFinished) return
     if (!openings?.length) return
     if (state.isOver) return
 

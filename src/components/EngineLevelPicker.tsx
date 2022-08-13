@@ -27,9 +27,6 @@ const EngineLevelPicker = () => {
             <MenuItem onClick={() => dispatch(setEngineDepth(3))}>
               AI Level 3
             </MenuItem>
-            <MenuItem onClick={() => dispatch(setEngineDepth(4))}>
-              AI Level 4
-            </MenuItem>
           </MenuList>
         </Menu>
       </Box>

@@ -27,9 +27,9 @@ const LandingPage = () => {
             <FormControl id="ai">
               <FormLabel>Level</FormLabel>
               <Select defaultValue="2" name="ai">
-                <option value="1">Easy</option>
-                <option value="2">Medium</option>
-                <option value="3">Hard</option>
+                <option value="1">AI Level 1</option>
+                <option value="2">AI Level 2</option>
+                <option value="3">AI Level 3</option>
               </Select>
               <FormHelperText>
                 {"Move time depends on device's processing power"}
