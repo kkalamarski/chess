@@ -33,7 +33,7 @@ const LandingPage = () => {
                 <option value="4">AI Level 4</option>
               </Select>
               <FormHelperText>
-                Move time depends on device's processing power
+                {"Move time depends on device's processing power"}
               </FormHelperText>
             </FormControl>
 
