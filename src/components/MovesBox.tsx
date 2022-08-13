@@ -44,7 +44,7 @@ const MovesBox: React.FC<{ PGN: string }> = ({ PGN }) => {
             <ModalBody>
               <SimpleGrid columns={3}>
                 {moves.map((x) => (
-                  <div>{x}</div>
+                  <div key={x}>{x}</div>
                 ))}
               </SimpleGrid>
             </ModalBody>
@@ -58,7 +58,7 @@ const MovesBox: React.FC<{ PGN: string }> = ({ PGN }) => {
       <strong>Moves:</strong>
       <SimpleGrid columns={3} maxH={200} ref={ref} overflow="scroll">
         {moves.map((x) => (
-          <div>{x}</div>
+          <div key={x}>{x}</div>
         ))}
       </SimpleGrid>
     </PgnViewerBox>

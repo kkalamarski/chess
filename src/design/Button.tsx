@@ -17,4 +17,6 @@ const ButtonWrapper: React.FC<ButtonProps> = React.forwardRef<ButtonProps, any>(
   }
 )
 
+ButtonWrapper.displayName = 'ButtonWrapper'
+
 export default ButtonWrapper
