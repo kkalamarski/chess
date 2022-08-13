@@ -61,7 +61,11 @@ interface ComputerGameProps {
   side: string
 }
 
-const ComputerGame: React.FC<ComputerGameProps> = ({ ai, timeControl, side }) => {
+const ComputerGame: React.FC<ComputerGameProps> = ({
+  ai,
+  timeControl,
+  side
+}) => {
   const [openings, setOpenings] = useState<string[]>([])
   const [state, dispatch] = useComputerGame()
   const turn = useTurn()
@@ -133,7 +137,7 @@ const ComputerGame: React.FC<ComputerGameProps> = ({ ai, timeControl, side }) =>
     if (state.isOver) return
 
     if (turn !== state.playerColor) {
-      ; (async () => {
+      const run = async () => {
         try {
           const [from, to] = playMoveFromOpeningBook(
             openings,
@@ -147,7 +151,9 @@ const ComputerGame: React.FC<ComputerGameProps> = ({ ai, timeControl, side }) =>
 
           onPlayerMove(from, to)
         }
-      })()
+      }
+
+      run()
     }
   }, [state.FEN, turn, state.playerColor, openings?.length])
 

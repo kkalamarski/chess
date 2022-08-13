@@ -1,6 +1,5 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
-import pieces from '../../public/assets/sprites/classic.png'
 import Pieces from '../../common/pieces'
 
 const PieceWrapper = styled.div<{ color: string }>`
@@ -68,7 +67,7 @@ const calculateSpritePosition = (p: { piece: string; color: string }) => {
   `
 }
 
-const PieceIcon = styled.img.attrs({ src: pieces }) <{
+const PieceIcon = styled.img.attrs({ src: 'assets/sprites/classic.png' }) <{
   piece: string
   color: string
 }>`

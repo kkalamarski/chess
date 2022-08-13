@@ -1,5 +1,11 @@
 import type { AppProps } from 'next/app'
-import { ChakraProvider, ColorModeScript, CSSReset } from '@chakra-ui/react'
+import {
+  Box,
+  Button,
+  ChakraProvider,
+  CSSReset,
+  Link
+} from '@chakra-ui/react'
 import theme from '../src/theme'
 import { createGlobalStyle } from 'styled-components'
 
@@ -28,7 +34,14 @@ function MyApp({ Component, pageProps }: AppProps) {
     <ChakraProvider theme={theme}>
       <CSSReset />
       <GlobalStyles />
-      <Component {...pageProps} />
+      <Box>
+        <Box p={15}>
+          <Button href="/" as={Link}>
+            Chess
+          </Button>
+        </Box>
+        <Component {...pageProps} />
+      </Box>
     </ChakraProvider>
   )
 }
