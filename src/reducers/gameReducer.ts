@@ -1,4 +1,4 @@
-import Actions from "../../../common/actions";
+import Actions from "../../common/actions";
 
 interface Action {
   type: Actions;
