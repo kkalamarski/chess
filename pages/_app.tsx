@@ -47,12 +47,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <ChakraProvider theme={theme}>
       <CSSReset />
       <GlobalStyles />
-      <Box>
-        <Box p={15}>
-          <Button href="/" as={Link}>
-            Chess
-          </Button>
-        </Box>
+      <Box h="100vh">
         <Component {...pageProps} />
       </Box>
     </ChakraProvider>

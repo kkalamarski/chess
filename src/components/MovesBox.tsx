@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 import useViewport from '../hooks/useViewport'
 import Button from '../design/Button'
@@ -9,6 +9,7 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
+  SimpleGrid,
   useDisclosure
 } from '@chakra-ui/react'
 
@@ -18,18 +19,18 @@ const PgnViewerBox = styled.section`
   grid-area: moves;
 `
 
-const PgnViewer = styled.article`
-  font-size: 1rem;
-  text-align: left;
-  height: 200px;
-  overflow: auto;
-  border: 1px solid #333333;
-  padding: 5px;
-`
-
 const MovesBox: React.FC<{ PGN: string }> = ({ PGN }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { width } = useViewport()
+  const ref = useRef<HTMLDivElement>(null)
+
+  const moves = useMemo(() => PGN.split(' '), [PGN])
+
+  useEffect(() => {
+    if (ref.current) {
+      ref.current.scrollTop = ref.current.scrollHeight
+    }
+  }, [moves])
 
   if (width < 1000)
     return (
@@ -41,7 +42,11 @@ const MovesBox: React.FC<{ PGN: string }> = ({ PGN }) => {
             <ModalHeader>Moves:</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-              <PgnViewer>{PGN}</PgnViewer>
+              <SimpleGrid columns={3}>
+                {moves.map((x) => (
+                  <div>{x}</div>
+                ))}
+              </SimpleGrid>
             </ModalBody>
           </ModalContent>
         </Modal>
@@ -51,7 +56,11 @@ const MovesBox: React.FC<{ PGN: string }> = ({ PGN }) => {
   return (
     <PgnViewerBox>
       <strong>Moves:</strong>
-      <PgnViewer>{PGN}</PgnViewer>
+      <SimpleGrid columns={3} maxH={200} ref={ref} overflow="scroll">
+        {moves.map((x) => (
+          <div>{x}</div>
+        ))}
+      </SimpleGrid>
     </PgnViewerBox>
   )
 }
