@@ -1,6 +1,3 @@
-// @ts-nocheck
-//
-
 const PRECACHE = 'precache-v1.1'
 const RUNTIME = 'runtime-v1.1'
 
