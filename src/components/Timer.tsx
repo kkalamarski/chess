@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import Pieces from '../../../common/pieces'
+import Pieces from '../../common/pieces'
 import { useComputerGame } from '../providers/ComputerGameProvider'
 
 const jsChess = require('js-chess-engine')

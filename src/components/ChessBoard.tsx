@@ -1,7 +1,7 @@
 import { Box } from '@chakra-ui/layout'
 import React, { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
-import Pieces from '../../../common/pieces'
+import Pieces from '../../common/pieces'
 import useViewport from '../hooks/useViewport'
 import GameResultModal, {
   GameResult,

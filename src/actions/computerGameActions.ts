@@ -1,5 +1,5 @@
 import Pieces from '../../common/pieces'
-import { GameResult, GameResultReason } from '../src/components/GameResultModal'
+import { GameResult, GameResultReason } from '../components/GameResultModal'
 
 enum ComputerGameActionTypes {
   UPDATE_FEN = 'UPDATE_FEN',

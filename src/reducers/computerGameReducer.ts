@@ -1,6 +1,6 @@
-import Pieces from '../../../common/pieces'
-import { convertGameToPGN } from '../../../engine/convertMoveToPGN'
-import ComputerGameActionTypes from '../../actions/computerGameActions'
+import Pieces from '../../common/pieces'
+import { convertGameToPGN } from '../../engine/convertMoveToPGN'
+import ComputerGameActionTypes from '../actions/computerGameActions'
 import { GameResult, GameResultReason } from '../components/GameResultModal'
 
 export interface ComputerGameState {
@@ -53,8 +53,8 @@ const computerGameReducer = (state: ComputerGameState, action: Action) => {
             ? Pieces.WHITE
             : Pieces.BLACK
           : action.data.side === 'white'
-          ? Pieces.WHITE
-          : Pieces.BLACK
+            ? Pieces.WHITE
+            : Pieces.BLACK
 
       const [time, increment] = action.data.timeControl.split('x').map(Number)
 

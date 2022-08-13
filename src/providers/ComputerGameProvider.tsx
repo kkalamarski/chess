@@ -1,23 +1,15 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useReducer
-} from 'react'
+import React, { useContext, useReducer } from 'react'
 import {
   registerMoveAction,
   updateFENAction
-} from '../../actions/computerGameActions'
+} from '../actions/computerGameActions'
 import computerGameReducer, {
   ComputerGameState,
   defaultState
 } from '../reducers/computerGameReducer'
 
-// @ts-ignore
-import moveAudio from 'url:../../../public/assets/sounds/move.wav'
-// @ts-ignore
-import checkAudio from 'url:../../../public/assets/sounds/check.wav'
+// import moveAudio from 'url:../../../public/assets/sounds/move.wav'
+// import checkAudio from 'url:../../../public/assets/sounds/check.wav'
 
 const jsChess = require('js-chess-engine')
 
@@ -47,17 +39,17 @@ export const usePlayerMove = () => {
   return (from: string, to: string) => {
     const FEN = jsChess.move(state.FEN, from, to)
 
-    const status = jsChess.status(FEN)
+    // const status = jsChess.status(FEN)
 
-    if (status.check) {
-      const moveSound = new Audio(checkAudio)
-      moveSound.volume = 0.1
-      moveSound.play()
-    } else {
-      const moveSound = new Audio(moveAudio)
-      moveSound.volume = 0.1
-      moveSound.play()
-    }
+    // if (status.check) {
+    //   const moveSound = new Audio(checkAudio)
+    //   moveSound.volume = 0.1
+    //   moveSound.play()
+    // } else {
+    //   const moveSound = new Audio(moveAudio)
+    //   moveSound.volume = 0.1
+    //   moveSound.play()
+    // }
 
     dispatch(updateFENAction(FEN))
     dispatch(registerMoveAction([from, to]))
@@ -70,7 +62,9 @@ export const useTurn = () => {
   return jsChess.status(state.FEN).turn
 }
 
-const ComputerGameProvider: React.FC = ({ children }) => {
+const ComputerGameProvider: React.FC<{ children: React.ReactNode }> = ({
+  children
+}) => {
   const [state, dispatch] = useReducer(computerGameReducer, defaultState)
 
   return (

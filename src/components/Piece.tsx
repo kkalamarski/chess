@@ -1,8 +1,7 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
-// @ts-ignore
-import pieces from 'url:../../assets/sprites/classic.png'
-import Pieces from '../../../common/pieces'
+import pieces from '../../public/assets/sprites/classic.png'
+import Pieces from '../../common/pieces'
 
 const PieceWrapper = styled.div<{ color: string }>`
   position: absolute;
@@ -69,7 +68,7 @@ const calculateSpritePosition = (p: { piece: string; color: string }) => {
   `
 }
 
-const PieceIcon = styled.img.attrs({ src: pieces })<{
+const PieceIcon = styled.img.attrs({ src: pieces }) <{
   piece: string
   color: string
 }>`

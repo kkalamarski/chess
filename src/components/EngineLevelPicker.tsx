@@ -1,6 +1,6 @@
 import React from 'react'
 import { useComputerGame } from '../providers/ComputerGameProvider'
-import { setEngineDepth } from '../../actions/computerGameActions'
+import { setEngineDepth } from '../actions/computerGameActions'
 import { Menu, MenuButton, MenuList } from '@chakra-ui/menu'
 import { Box, MenuItem, Stack } from '@chakra-ui/react'
 import ButtonWrapper from '../design/Button'

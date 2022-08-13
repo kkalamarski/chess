@@ -12,17 +12,20 @@ import {
   incrementAction,
   restartAction
 } from '../actions/computerGameActions'
-import GameView from '../src/components/GameView'
-import GameWrapper from '../src/components/GameWrapper'
-import LoadingScreen from '../src/components/LoadingScreen'
-import { useComputerGame, useTurn } from '../src/providers/ComputerGameProvider'
+import GameView from '../../src/components/GameView'
+import GameWrapper from '../../src/components/GameWrapper'
+import LoadingScreen from '../../src/components/LoadingScreen'
+import {
+  useComputerGame,
+  useTurn
+} from '../../src/providers/ComputerGameProvider'
 
-// @ts-ignore
-import moveAudio from 'url:../assets/sounds/move.wav'
-// @ts-ignore
-import checkAudio from 'url:../assets/sounds/check.wav'
-import { GameResult, GameResultReason } from '../src/components/GameResultModal'
-import { RouteProps, useHistory } from 'react-router-dom'
+// import moveAudio from '../../public/assets/sounds/move.wav'
+// import checkAudio from '../../public/assets/sounds/check.wav'
+import {
+  GameResult,
+  GameResultReason
+} from '../../src/components/GameResultModal'
 
 const jsChess = require('js-chess-engine')
 
@@ -52,22 +55,19 @@ const playMoveFromOpeningBook = (
   throw 'no book move'
 }
 
-const ComputerGame: React.FC<RouteProps> = ({ location }) => {
-  const history = useHistory()
+interface ComputerGameProps {
+  ai: string
+  timeControl: string
+  side: string
+}
+
+const ComputerGame: React.FC<ComputerGameProps> = ({ ai, timeControl, side }) => {
   const [openings, setOpenings] = useState<string[]>([])
   const [state, dispatch] = useComputerGame()
   const turn = useTurn()
 
   useEffect(() => {
-    if (location?.state) {
-      dispatch(setInitialSettingsAction(location.state as any))
-    } else {
-      history.replace('/')
-    }
-
-    return () => {
-      dispatch(restartAction())
-    }
+    dispatch(setInitialSettingsAction({ ai, timeControl, side }))
   }, [])
 
   const onPlayerMove = useCallback(
@@ -76,15 +76,15 @@ const ComputerGame: React.FC<RouteProps> = ({ location }) => {
 
       const status = jsChess.status(FEN)
 
-      if (status.check) {
-        const moveSound = new Audio(checkAudio)
-        moveSound.volume = 0.1
-        moveSound.play()
-      } else {
-        const moveSound = new Audio(moveAudio)
-        moveSound.volume = 0.1
-        moveSound.play()
-      }
+      // if (status.check) {
+      //   const moveSound = new Audio(checkAudio)
+      //   moveSound.volume = 0.1
+      //   moveSound.play()
+      // } else {
+      //   const moveSound = new Audio(moveAudio)
+      //   moveSound.volume = 0.1
+      //   moveSound.play()
+      // }
 
       dispatch(
         incrementAction(
@@ -98,7 +98,7 @@ const ComputerGame: React.FC<RouteProps> = ({ location }) => {
   )
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       const book1: any = await import('../../engine/opening_book1.json')
       setOpenings(book1.default.default ?? book1.default)
 
@@ -133,7 +133,7 @@ const ComputerGame: React.FC<RouteProps> = ({ location }) => {
     if (state.isOver) return
 
     if (turn !== state.playerColor) {
-      ;(async () => {
+      ; (async () => {
         try {
           const [from, to] = playMoveFromOpeningBook(
             openings,

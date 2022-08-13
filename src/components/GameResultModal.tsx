@@ -3,7 +3,7 @@ import React from 'react'
 import {
   closeResultsWindow,
   restartAction
-} from '../../actions/computerGameActions'
+} from '../actions/computerGameActions'
 import RelativeModal from '../design/RelativeModal'
 import { useComputerGame } from '../providers/ComputerGameProvider'
 
@@ -30,9 +30,9 @@ const colorMap = {
   [GameResult.Progress]: 'white'
 }
 
-interface GameResultsModalProps {}
+interface GameResultsModalProps { }
 
-const GameResultModal: React.FC<GameResultsModalProps> = ({}) => {
+const GameResultModal: React.FC<GameResultsModalProps> = ({ }) => {
   const [state, dispatch] = useComputerGame()
 
   return (
@@ -59,7 +59,6 @@ const GameResultModal: React.FC<GameResultsModalProps> = ({}) => {
           <Button
             variant="solid"
             size="sm"
-            isFullWidth
             colorScheme="blackAlpha"
             onClick={() => dispatch(restartAction())}
           >
@@ -68,7 +67,6 @@ const GameResultModal: React.FC<GameResultsModalProps> = ({}) => {
           <Button
             variant="solid"
             size="sm"
-            isFullWidth
             colorScheme="blackAlpha"
             onClick={() => dispatch(closeResultsWindow())}
           >

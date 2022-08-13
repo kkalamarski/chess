@@ -5,7 +5,7 @@ import { useComputerGame } from '../providers/ComputerGameProvider'
 import {
   changeSidesAction,
   restartAction
-} from '../../actions/computerGameActions'
+} from '../actions/computerGameActions'
 import { Stack } from '@chakra-ui/layout'
 import { NotAllowedIcon, RepeatClockIcon, RepeatIcon } from '@chakra-ui/icons'
 
